@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BannerController;
@@ -41,50 +40,13 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\SpecialFeatureController;
 use App\Http\Controllers\ssdController;
-use App\Http\Controllers\SslCommerzPaymentController;
 use App\Http\Controllers\UsersController;
-use App\Livewire\AboutUs;
-use App\Livewire\Account;
-use App\Livewire\Address;
-use App\Livewire\CatWiseShop;
-use App\Livewire\ChangePassword;
-use App\Livewire\Checkout;
-use App\Livewire\ConfirmPassword;
-use App\Livewire\EditProfile;
-use App\Livewire\ForgetPassword;
-use App\Livewire\HomePage;
-use App\Livewire\InstallmentCheckout;
-use App\Livewire\Login;
-use App\Livewire\NewProduct;
-use App\Livewire\PrivacyPolicy;
-use App\Livewire\ProductDeatils;
-use App\Livewire\RefundServicePolicy;
-use App\Livewire\Shop;
-use App\Livewire\Signup;
-use App\Livewire\TermComdition;
-use App\Livewire\Offer;
-use App\Livewire\OrderConfirm;
-use App\Livewire\OrderReceived;
-use App\Livewire\OtpConfirm;
-use App\Livewire\RedirectToPay;
-use App\Livewire\ResetPassword;
-use App\Livewire\Review;
-use App\Livewire\SearchingProduct;
-use App\Livewire\SingleCheckout;
-use App\Livewire\ViewCart;
-use App\Livewire\Wishlist;
 use \UniSharp\LaravelFilemanager\Lfm;
 
-/*
-    |--------------------------------------------------------------------------
-    | Web Routes
-    |--------------------------------------------------------------------------
-    |
-    | Here is where you can register web routes for your application. These
-    | routes are loaded by the RouteServiceProvider within a group which
-    | contains the "web" middleware group. Now create something great!
-    |
-    */
+//Home routes
+Route::get('/', function () {
+    return to_route('login');
+});
 // CACHE CLEAR ROUTE
 Route::get('cache-clear', function () {
     Artisan::call('optimize:clear');
@@ -100,8 +62,6 @@ Route::get('mdnh/str-link', function () {
 
 // STORAGE LINKED ROUTE
 Route::get('storage-link', [AdminController::class, 'storageLink'])->name('storage.link');
-
-
 
 Auth::routes(['register' => false]);
 
@@ -231,7 +191,7 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
     // Profile
     Route::get('/profile', [AdminController::class, 'profile'])->name('admin-profile');
     Route::post('/profile/{id}', [AdminController::class, 'profileUpdate'])->name('profile-update');
-    
+
     // Category
     Route::resource('/category', CategoryController::class);
     //Product Attribute
@@ -342,74 +302,3 @@ Route::group(['prefix' => '/user', 'middleware' => ['user']], function () {
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
     Lfm::routes();
 });
-
-
-
-
-// ===========================================================================================================
-//=====================================       Frontend section          ======================================
-//=============================================================================================================
-Route::get('/', HomePage::class)->name('home');
-Route::get('/shop', Shop::class)->name('shop');
-Route::get('/new-product/{product_type}', NewProduct::class)->name('new_product');
-Route::get('/shop/sorting', [AjaxController::class, 'shopSorting'])->name('shop.shorting');
-Route::get('/category-wise/{cat?}/{subcat?}', CatWiseShop::class)->name('cate_wise.shop');
-Route::get('/search/{stext?}/{cat?}', SearchingProduct::class)->name('searching_product');
-Route::get('/product-details/{slug}', ProductDeatils::class)->name('product.details');
-Route::get('/checkout', Checkout::class)->name('checkout');
-Route::get('/view-cart', ViewCart::class)->name('vcart');
-Route::get('/user/register', Signup::class)->name('user.register');
-Route::get('/user/login', Login::class)->name('user.login');
-Route::get('/user/forget-password', ForgetPassword::class)->name('user.fp');
-Route::get('/user/reset-password', ResetPassword::class)->name('user.rp');
-Route::get('/user/confirm-password', ConfirmPassword::class)->name('user.cp');
-Route::get('/terms-and-conditions', TermComdition::class)->name('tc');
-Route::get('/refund-and-service-policy', RefundServicePolicy::class)->name('rsp');
-Route::get('/privacy-policy', PrivacyPolicy::class)->name('pp');
-Route::get('/offers', Offer::class)->name('offer');
-Route::get('/otp-confirm', OtpConfirm::class)->name('otpc');
-Route::get('/product-review', Review::class)->name('preview');
-// Route::get('/edit-profile', EditProfile::class)->name('eprofile');
-Route::get('/wishlist', Wishlist::class)->name('wishlist');
-Route::get('/your-review', Review::class)->name('freview');
-Route::get('/about-us', AboutUs::class)->name('about_us');
-Route::get('/plus', [AjaxController::class, 'plus'])->name('plus');
-Route::get('/minus', [AjaxController::class, 'minus'])->name('minus');
-Route::get('/post', [AjaxController::class, 'post'])->name('post');
-Route::get('/delete', [AjaxController::class, 'delete'])->name('delete');
-Route::get('/sync', [AjaxController::class, 'sync'])->name('sync');
-Route::get('/add-to-cart', [AjaxController::class, 'addToCart'])->name('add_to_cart');
-Route::get('/order-received/{order_number}', OrderReceived::class)->name('order.receive');
-Route::post('/product-review', [AjaxController::class, 'productReview'])->name('product_review');
-Route::get('/coupon-fetch', [AjaxController::class, 'couponFetch'])->name('coupon.fetch');
-Route::get('/single-checkout/{pslug}', SingleCheckout::class)->name('single_checkout');
-Route::get('/installment-checkout/{pslug}', InstallmentCheckout::class)->name('installment_checkout');
-
-Route::middleware('auth')->group(function () {
-    Route::post('/cart-sotre', [AjaxController::class, 'cartStore'])->name('cart.store');
-    // Route::get('/billing',[AjaxController::class,'addToCart'])->name('add_to_cart');
-
-    // user account
-    Route::get('/account', Account::class)->name('account');
-    Route::get('/edit-profile', EditProfile::class)->name('ep');
-    Route::get('/order-confirm', OrderConfirm::class)->name('oc');
-    Route::get('/address', Address::class)->name('address');
-    Route::get('/change-password', ChangePassword::class)->name('cp');
-    Route::get('/pay/ssl/{order_number}', RedirectToPay::class)->name('pssl');
-});
-
-
-// SSLCOMMERZ Start
-Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);
-Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
-
-Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
-Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
-
-Route::post('/success', [SslCommerzPaymentController::class, 'success']);
-Route::get('/payment/ssl/success/{id}', [SslCommerzPaymentController::class, 'successPage'])->name('ssl.success');
-Route::post('/fail', [SslCommerzPaymentController::class, 'fail']);
-Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel']);
-
-Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
-//SSLCOMMERZ END

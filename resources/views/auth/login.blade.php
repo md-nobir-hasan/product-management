@@ -10,14 +10,10 @@
 </head>
 
 <body class="bg-gradient-primary">
-
   <div class="container">
-
     <!-- Outer Row -->
     <div class="row justify-content-center">
-
       <div class="mt-5 col-xl-10 col-lg-12 col-md-9">
-
         <div class="my-5 border-0 shadow-lg card o-hidden">
           <div class="p-0 card-body">
             <!-- Nested Row within Card Body -->

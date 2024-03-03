@@ -1,13 +1,12 @@
 @extends('backend.layouts.master')
 @push('title')
-    Update SSD
+    Update Branch
 @endpush
-{{-- @section('title', 'E-SHOP || SSD Create') --}}
 @section('main-content')
     <div class="card">
-        <h5 class="card-header">Update SSD</h5>
+        <h5 class="card-header">Update Branch</h5>
         <div class="card-body">
-            <form method="post" action="{{ route('pa.ssd.update',$datum->id) }}">
+            <form method="post" action="{{ route('pa.branch.update',$datum->id) }}">
                 {{ csrf_field() }}
                 @method('PUT')
                 <div class="form-group">

@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @push('title')
-    Display Type
+    Branch
 @endpush
 @section('main-content')
     <!-- DataTales Example -->
@@ -11,11 +11,11 @@
             </div>
         </div>
         <div class="py-3 card-header d-flex justify-content-between">
-            <h6 class="float-left m-0 font-weight-bold text-primary">Display Type List</h6>
+            <h6 class="font-weight-bold text-primary">Branch List</h6>
             <h6 class="font-weight-bold text-primary">Total: {{count($count)}} || Active: {{count($count->where('status','active'))}} || Inactive: {{count($count->where('status','inactive'))}}</h6>
-            @can('Create Display Type')
-                <a href="{{ route('pa.display-type.create') }}" class="float-right btn btn-primary btn-sm" data-toggle="tooltip"
-                    data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add Display Type</a>
+            @can('Create Branch')
+                <a href="{{ route('pa.branch.create') }}" class="btn btn-primary btn-sm" data-toggle="tooltip"
+                    data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add Branch</a>
             @endcan
         </div>
         <div class="card-body">
@@ -26,7 +26,7 @@
                             <tr>
                                 <th>S.N.</th>
                                 <th>Title</th>
-                                @canany(['Edit Display Type', 'Delete Display Type'])
+                                @canany(['Edit Branch', 'Delete Branch'])
                                     <th>Action</th>
                                 @endcanany
                             </tr>
@@ -35,7 +35,7 @@
                             <tr>
                                 <th>S.N.</th>
                                 <th>Title</th>
-                                @canany(['Edit Display Type', 'Delete Display Type'])
+                                @canany(['Edit Branch', 'Delete Branch'])
                                     <th>Action</th>
                                 @endcanany
                             </tr>
@@ -43,17 +43,17 @@
                         <tbody>
                             @foreach ($mdata as $datum)
                                 <tr>
-                                    <td>{{ $datum->id }}</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ $datum->name }}</td>
                                     <td>
-                                        @can('Edit Display Type')
-                                            <a href="{{ route('pa.display-type.edit', $datum->id) }}"
+                                        @can('Edit Branch')
+                                            <a href="{{ route('pa.branch.edit', $datum->id) }}"
                                                 class="float-left mr-1 btn btn-primary btn-sm"
                                                 style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
                                                 title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
                                         @endcan
-                                        @can('Delete Display Type')
-                                            <form method="POST" action="{{ route('pa.display-type.destroy', [$datum->id]) }}">
+                                        @can('Delete Branch')
+                                            <form method="POST" action="{{ route('pa.branch.destroy', [$datum->id]) }}">
                                                 @csrf
                                                 @method('delete')
                                                 <button class="btn btn-danger btn-sm dltBtn" data-id={{ $datum->id }}
@@ -67,7 +67,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <span>{{ $mdata->links('vendor.pagination.bootstrap-5') }}</span>
+                    <span>{{ $mdata->links('vendor.pagination.bootstrap-5 ') }}</span>
                 @else
                     <h6 class="text-center">No brands found!!! Please create brand</h6>
                 @endif

@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\DisplaySize;
-use App\Models\DisplayType;
+use App\Models\Size;
+use App\Models\Color;
 use App\Models\Graphic;
 use App\Models\hdd;
 use App\Models\ProcessorGeneration;
@@ -9,7 +9,7 @@ use App\Models\ProcessorModel;
 use App\Models\ProductOffer;
 use App\Models\Ram;
 use App\Models\SpecialFeature;
-use App\Models\ssd;
+use App\Models\Branch;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -69,8 +69,8 @@ class CreateProductsTable extends Migration
             $table->text('p_other')->nullable();
 
             //Display Attributes => (6)
-            $table->foreignIdFor(DisplaySize::class)->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignIdFor(DisplayType::class)->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(Size::class)->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(Color::class)->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('d_resolution')->nullable();
             // $table->text('d_other_features')->nullable();
             $table->boolean('touch_screen')->default(false);
@@ -84,8 +84,8 @@ class CreateProductsTable extends Migration
             $table->boolean('m_removal')->default(false);
             $table->text('m_other')->nullable();
 
-            //Storage Attributes (HDD/SSD) => (7)
-            $table->foreignIdFor(ssd::class)->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            //Storage Attributes (HDD/Branch) => (7)
+            $table->foreignIdFor(Branch::class)->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignIdFor(hdd::class)->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->integer('s_slot')->nullable();
             $table->boolean('s_extra_m2_slot')->default(false);

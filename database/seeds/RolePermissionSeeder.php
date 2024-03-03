@@ -146,17 +146,17 @@ class RolePermissionSeeder extends Seeder
             ['name' => 'Edit Processor Generation', 'guard_name' => 'web'],
             ['name' => 'Delete Processor Generation', 'guard_name' => 'web'],
 
-            //Display Size
-            ['name' => 'Show Display Size', 'guard_name' => 'web'],
-            ['name' => 'Create Display Size', 'guard_name' => 'web'],
-            ['name' => 'Edit Display Size', 'guard_name' => 'web'],
-            ['name' => 'Delete Display Size', 'guard_name' => 'web'],
+            //Size
+            ['name' => 'Show Size', 'guard_name' => 'web'],
+            ['name' => 'Create Size', 'guard_name' => 'web'],
+            ['name' => 'Edit Size', 'guard_name' => 'web'],
+            ['name' => 'Delete Size', 'guard_name' => 'web'],
 
-            //Display Type
-            ['name' => 'Show Display Type', 'guard_name' => 'web'],
-            ['name' => 'Create Display Type', 'guard_name' => 'web'],
-            ['name' => 'Edit Display Type', 'guard_name' => 'web'],
-            ['name' => 'Delete Display Type', 'guard_name' => 'web'],
+            //Color
+            ['name' => 'Show Color', 'guard_name' => 'web'],
+            ['name' => 'Create Color', 'guard_name' => 'web'],
+            ['name' => 'Edit Color', 'guard_name' => 'web'],
+            ['name' => 'Delete Color', 'guard_name' => 'web'],
 
             //RAM
             ['name' => 'Show RAM', 'guard_name' => 'web'],
@@ -170,11 +170,11 @@ class RolePermissionSeeder extends Seeder
             ['name' => 'Edit HDD', 'guard_name' => 'web'],
             ['name' => 'Delete HDD', 'guard_name' => 'web'],
 
-            //SSD
-            ['name' => 'Show SSD', 'guard_name' => 'web'],
-            ['name' => 'Create SSD', 'guard_name' => 'web'],
-            ['name' => 'Edit SSD', 'guard_name' => 'web'],
-            ['name' => 'Delete SSD', 'guard_name' => 'web'],
+            //Branch
+            ['name' => 'Show Branch', 'guard_name' => 'web'],
+            ['name' => 'Create Branch', 'guard_name' => 'web'],
+            ['name' => 'Edit Branch', 'guard_name' => 'web'],
+            ['name' => 'Delete Branch', 'guard_name' => 'web'],
 
             //Graphic
             ['name' => 'Show Graphic', 'guard_name' => 'web'],

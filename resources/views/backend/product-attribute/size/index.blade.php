@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @push('title')
-    Display Size
+    Size
 @endpush
 @section('main-content')
     <!-- DataTales Example -->
@@ -11,11 +11,11 @@
             </div>
         </div>
         <div class="py-3 card-header d-flex justify-content-between">
-            <h6 class="float-left m-0 font-weight-bold text-primary">Display Size List</h6>
+            <h6 class="float-left m-0 font-weight-bold text-primary">Size List</h6>
             <h6 class="font-weight-bold text-primary">Total: {{count($count)}} || Active: {{count($count->where('status','active'))}} || Inactive: {{count($count->where('status','inactive'))}}</h6>
-            @can('Create Display Size')
-                <a href="{{ route('pa.display-size.create') }}" class="float-right btn btn-primary btn-sm" data-toggle="tooltip"
-                    data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add Display Size</a>
+            @can('Create Size')
+                <a href="{{ route('pa.size.create') }}" class="float-right btn btn-primary btn-sm" data-toggle="tooltip"
+                    data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add Size</a>
             @endcan
         </div>
         <div class="card-body">
@@ -25,8 +25,9 @@
                         <thead>
                             <tr>
                                 <th>S.N.</th>
+                                  <th>Name</th>
                                 <th>Size (inch)</th>
-                                @canany(['Edit Display Size', 'Delete Display Size'])
+                                @canany(['Edit Size', 'Delete Size'])
                                     <th>Action</th>
                                 @endcanany
                             </tr>
@@ -34,8 +35,9 @@
                         <tfoot>
                             <tr>
                                 <th>S.N.</th>
+                                <th>Name</th>
                                 <th>Size</th>
-                                @canany(['Edit Display Size', 'Delete Display Size'])
+                                @canany(['Edit Size', 'Delete Size'])
                                     <th>Action</th>
                                 @endcanany
                             </tr>
@@ -43,17 +45,18 @@
                         <tbody>
                             @foreach ($mdata as $datum)
                                 <tr>
-                                    <td>{{ $datum->id }}</td>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $datum->name }}</td>
                                     <td>{{ $datum->size }}</td>
                                     <td>
-                                        @can('Edit Display Size')
-                                            <a href="{{ route('pa.display-size.edit', $datum->id) }}"
+                                        @can('Edit Size')
+                                            <a href="{{ route('pa.size.edit', $datum->id) }}"
                                                 class="float-left mr-1 btn btn-primary btn-sm"
                                                 style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
                                                 title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
                                         @endcan
-                                        @can('Delete Display Size')
-                                            <form method="POST" action="{{ route('pa.display-size.destroy', [$datum->id]) }}">
+                                        @can('Delete Size')
+                                            <form method="POST" action="{{ route('pa.size.destroy', [$datum->id]) }}">
                                                 @csrf
                                                 @method('delete')
                                                 <button class="btn btn-danger btn-sm dltBtn" data-id={{ $datum->id }}

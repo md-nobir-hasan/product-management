@@ -51,21 +51,25 @@ class ProductAttributeSeeder extends Seeder
         ];
         DB::table('processor_models')->insert($processer_model);
 
-        $display_size = [
-            ['size' => 13],
-            ['size' => 13],
-            ['size' => 14],
-            ['size' => 15],
-            ['size' => 16],
-            ['size' => 17],
+        $size = [
+            ['name'=>'SM','measurement' => 13],
+            ['name'=>'M','measurement' => 13],
+            ['name'=>'L','measurement' => 14],
+            ['name'=>'XL','measurement' => 15],
+            ['name'=>'XXL','measurement' => 16],
         ];
-        DB::table('display_sizes')->insert($display_size);
+        DB::table('sizes')->insert($size);
 
-        $display_type = [
-            ['name' => 'LED'],
-            ['name' => 'OLED'],
+        $color = [
+            ['name' => 'red','code'=> '#ff0000'],
+            ['name' => 'green','code'=> '#008000'],
+            ['name' => 'yellow','code'=> '#ffff00'],
+            ['name' => 'black','code'=> '#000000'],
+            ['name' => 'pink','code'=> '#ffc0cb'],
+            ['name' => 'violet','code'=> '#ee82ee'],
+            ['name' => 'blue','code'=> '#0000ff'],
         ];
-        DB::table('display_types')->insert($display_type);
+        DB::table('colors')->insert($color);
 
         $ram = [
             ['ram' => '4','type'=>'DDR5','bus_speed'=>5500,],
@@ -82,13 +86,13 @@ class ProductAttributeSeeder extends Seeder
         ];
         DB::table('hdds')->insert($hdd);
 
-        $ssd = [
-            ['name' => '128 GB'],
-            ['name' => '256 GB'],
-            ['name' => '512 GB'],
-            ['name' => '1 TB'],
+        $branch = [
+            ['name' => 'Dhaka'],
+            ['name' => 'Chuadanga'],
+            ['name' => 'Rajshahi'],
+            ['name' => 'Chattogram'],
         ];
-        DB::table('ssds')->insert($ssd);
+        DB::table('branches')->insert($branch);
 
         $graphic = [
             ['name' => 'Integrated/Shared'],

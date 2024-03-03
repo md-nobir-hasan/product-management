@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @push('title')
-    SSD
+    Color
 @endpush
 @section('main-content')
     <!-- DataTales Example -->
@@ -11,11 +11,13 @@
             </div>
         </div>
         <div class="py-3 card-header d-flex justify-content-between">
-            <h6 class="font-weight-bold text-primary">SSD List</h6>
-            <h6 class="font-weight-bold text-primary">Total: {{count($count)}} || Active: {{count($count->where('status','active'))}} || Inactive: {{count($count->where('status','inactive'))}}</h6>
-            @can('Create SSD')
-                <a href="{{ route('pa.ssd.create') }}" class="btn btn-primary btn-sm" data-toggle="tooltip"
-                    data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add SSD</a>
+            <h6 class="float-left m-0 font-weight-bold text-primary">Color List</h6>
+            <h6 class="font-weight-bold text-primary">Total: {{ count($count) }} || Active:
+                {{ count($count->where('status', 'active')) }} || Inactive: {{ count($count->where('status', 'inactive')) }}
+            </h6>
+            @can('Create Color')
+                <a href="{{ route('pa.color.create') }}" class="float-right btn btn-primary btn-sm" data-toggle="tooltip"
+                    data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add Color</a>
             @endcan
         </div>
         <div class="card-body">
@@ -25,8 +27,9 @@
                         <thead>
                             <tr>
                                 <th>S.N.</th>
-                                <th>Title</th>
-                                @canany(['Edit SSD', 'Delete SSD'])
+                                <th>Color Name</th>
+                                <th>Color Code</th>
+                                @canany(['Edit Color', 'Delete Color'])
                                     <th>Action</th>
                                 @endcanany
                             </tr>
@@ -34,8 +37,9 @@
                         <tfoot>
                             <tr>
                                 <th>S.N.</th>
-                                <th>Title</th>
-                                @canany(['Edit SSD', 'Delete SSD'])
+                                <th>Color Name</th>
+                                <th>Color Code</th>
+                                @canany(['Edit Color', 'Delete Color'])
                                     <th>Action</th>
                                 @endcanany
                             </tr>
@@ -43,17 +47,18 @@
                         <tbody>
                             @foreach ($mdata as $datum)
                                 <tr>
-                                    <td>{{ $datum->id }}</td>
+                                    <td>{{ $loop->iteration}}</td>
                                     <td>{{ $datum->name }}</td>
+                                    <td>{{ $datum->code }}</td>
                                     <td>
-                                        @can('Edit SSD')
-                                            <a href="{{ route('pa.ssd.edit', $datum->id) }}"
+                                        @can('Edit Color')
+                                            <a href="{{ route('pa.color.edit', $datum->id) }}"
                                                 class="float-left mr-1 btn btn-primary btn-sm"
                                                 style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
                                                 title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
                                         @endcan
-                                        @can('Delete SSD')
-                                            <form method="POST" action="{{ route('pa.ssd.destroy', [$datum->id]) }}">
+                                        @can('Delete Color')
+                                            <form method="POST" action="{{ route('pa.color.destroy', [$datum->id]) }}">
                                                 @csrf
                                                 @method('delete')
                                                 <button class="btn btn-danger btn-sm dltBtn" data-id={{ $datum->id }}
@@ -67,7 +72,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <span>{{ $mdata->links('vendor.pagination.bootstrap-5 ') }}</span>
+                    <span>{{ $mdata->links('vendor.pagination.bootstrap-5') }}</span>
                 @else
                     <h6 class="text-center">No brands found!!! Please create brand</h6>
                 @endif

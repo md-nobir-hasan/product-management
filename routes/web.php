@@ -16,8 +16,8 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductReviewController;
 use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\CouponController;
-use App\Http\Controllers\DisplaySizeController;
-use App\Http\Controllers\DisplayTypeController;
+use App\Http\Controllers\SizeController;
+use App\Http\Controllers\ColorController;
 use App\Http\Controllers\DurationController;
 use App\Http\Controllers\GraphicController;
 use App\Http\Controllers\GtagController;
@@ -39,7 +39,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\SpecialFeatureController;
-use App\Http\Controllers\ssdController;
+use App\Http\Controllers\BranchController;
 use App\Http\Controllers\UsersController;
 use \UniSharp\LaravelFilemanager\Lfm;
 
@@ -196,16 +196,17 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
     Route::resource('/category', CategoryController::class);
     //Product Attribute
     Route::prefix('/product-attributes')->name('pa.')->group(function () {
-        Route::resource('/processor-model', ProcessorModelController::class);
-        Route::resource('/processor-generation', ProcessorGenerationController::class);
-        Route::resource('/display-size', DisplaySizeController::class);
-        Route::resource('/display-type', DisplayTypeController::class);
-        Route::resource('/ram', RamController::class);
-        Route::resource('/hdd', hddController::class);
-        Route::resource('/ssd', ssdController::class);
-        Route::resource('/graphic', GraphicController::class);
-        Route::resource('/special-feature', SpecialFeatureController::class);
-        Route::resource('/product-offers', ProductOfferController::class);
+        Route::resource('/branch', BranchController::class);
+        Route::resource('/size', SizeController::class);
+        Route::resource('/color', ColorController::class);
+
+        // Route::resource('/processor-model', ProcessorModelController::class);
+        // Route::resource('/processor-generation', ProcessorGenerationController::class);
+        // Route::resource('/ram', RamController::class);
+        // Route::resource('/hdd', hddController::class);
+        // Route::resource('/graphic', GraphicController::class);
+        // Route::resource('/special-feature', SpecialFeatureController::class);
+        // Route::resource('/product-offers', ProductOfferController::class);
     });
     // Product
     Route::resource('/product', ProductController::class)->middleware(['can:Show Product']);

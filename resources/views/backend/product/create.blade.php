@@ -18,16 +18,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="model" class="col-form-label">Model</label>
-                        <input id="model" type="text" name="model" placeholder="Exp:- Enter Model"
-                            value="{{ old('model') }}" class="form-control">
-                        @error('model')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label for="mpn" class="col-form-label">Manufacture Name</label>
+                        <label for="mpn" class="col-form-label">Code</label>
                         <input id="mpn" type="text" name="mpn" placeholder="Exp:- Enter Manufacture Name"
                             value="{{ old('mpn') }}" class="form-control">
                         @error('mpn')
@@ -36,7 +27,15 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="price" class="col-form-label">Price(BDT)<span class="text-danger">*</span> </label>
+                        <label for="buying_price" class="col-form-label">Buying price (BDT)<span class="text-danger">*</span> </label>
+                        <input id="buying_price" type="text" name="buying_price" placeholder="Exp:- Enter buying_price" step="1"
+                            value="{{ old('buying_price') }}" class="form-control">
+                        @error('buying_price')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="price" class="col-form-label">Selling Price(BDT)<span class="text-danger">*</span> </label>
                         <input id="price" type="text" name="price" placeholder="Exp:- Enter price" step="1"
                             value="{{ old('price') }}" class="form-control">
                         @error('price')
@@ -74,7 +73,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="summary" class="col-form-label">Summary </label>
+                        <label for="summary" class="col-form-label">Summary</label>
                         <textarea class="form-control" id="summary" name="summary">{{ old('summary') }}</textarea>
                         @error('summary')
                             <span class="text-danger">{{ $message }}</span>
@@ -989,7 +988,7 @@
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
- 
+
                         {{-- w_details  --}}
                         <div class="form-group">
                             <label for="w_details" class="col-form-label">Other Warranty</label>

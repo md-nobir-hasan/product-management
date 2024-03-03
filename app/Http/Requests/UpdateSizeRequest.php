@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateDisplaySizeRequest extends FormRequest
+class UpdateSizeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,8 @@ class UpdateDisplaySizeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'size' => 'required|numeric|max:255',
+            'name' => 'nullable|string|max:255|unique:sizes,name,'.$this->size->id,
+            'size' => 'nullable|numeric|max:999999',
         ];
     }
 }

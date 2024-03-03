@@ -4516,7 +4516,7 @@ a.badge:hover {
 }
 .btn .badge {
     position: relative;
-    top: -1px;
+    top: -9px;
 }
 .badge-pill {
     padding-right: 0.6em;

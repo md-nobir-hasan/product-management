@@ -128,13 +128,13 @@ Route::get('blog-tag/{slug}', [FrontendController::class, 'blogByTag'])->name('b
 // NewsLetter
 Route::post('/subscribe', [FrontendController::class, 'subscribe'])->name('subscribe');
 
-// Company Review
-Route::resource('/review', CompanyReviewController::class);
-Route::post('product/{slug}/review', [CompanyReviewController::class, 'store'])->name('review.store');
-Route::post('review-status/change', [CompanyReviewController::class, 'reviewStatusChange'])->name('review_status.change');
+// // Company Review
+// Route::resource('/review', CompanyReviewController::class);
+// Route::post('product/{slug}/review', [CompanyReviewController::class, 'store'])->name('review.store');
+// Route::post('review-status/change', [CompanyReviewController::class, 'reviewStatusChange'])->name('review_status.change');
 
-// Product Review
-Route::resource('/productreview', ProductReviewController::class);
+// // Product Review
+// Route::resource('/productreview', ProductReviewController::class);
 // Route::get('/productreview', [ProductReviewController::class,'index'])->name('productreview.index');
 
 // Post Comment
@@ -177,11 +177,11 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
         Route::post('/setting/update', [AdminController::class, 'otherSettingsUpdate'])->name('os.update');
     });
 
-    // SEO Management
-    Route::prefix('/seo')->name('seo.')->group(function () {
-        Route::resource('gtag', GtagController::class);
-        Route::resource('pixel', PixelController::class);
-    });
+    // // SEO Management
+    // Route::prefix('/seo')->name('seo.')->group(function () {
+    //     Route::resource('gtag', GtagController::class);
+    //     Route::resource('pixel', PixelController::class);
+    // });
 
     // Banner
     Route::resource('banner', BannerController::class);
@@ -194,6 +194,7 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
 
     // Category
     Route::resource('/category', CategoryController::class);
+
     //Product Attribute
     Route::prefix('/product-attributes')->name('pa.')->group(function () {
         Route::resource('/branch', BranchController::class);
@@ -208,19 +209,23 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
         // Route::resource('/special-feature', SpecialFeatureController::class);
         // Route::resource('/product-offers', ProductOfferController::class);
     });
+
     // Product
     Route::resource('/product', ProductController::class)->middleware(['can:Show Product']);
+
     // Ajax for sub category
     Route::post('/category/{id}/child', [CategoryController::class, 'getChildByParent']);
-    // POST category
-    Route::resource('/post-category', PostCategoryController::class);
+
+    // // POST category
+    // Route::resource('/post-category', PostCategoryController::class);
 
     // Duration
-    Route::resource('/duration', DurationController::class);
-    // Post tag
-    Route::resource('/post-tag', PostTagController::class);
-    // Post
-    Route::resource('/post', PostController::class);
+    // Route::resource('/duration', DurationController::class);
+    // // Post tag
+    // Route::resource('/post-tag', PostTagController::class);
+    // // Post
+    // Route::resource('/post', PostController::class);
+
     // Message
     Route::resource('/message', MessageController::class);
     Route::get('/message/five', [MessageController::class, 'messageFive'])->name('messages.five');
@@ -235,7 +240,7 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
     Route::resource('/shipping', ShippingController::class);
 
     // Coupon
-    Route::resource('/coupon', CouponController::class);
+    // Route::resource('/coupon', CouponController::class);
 
 
     // Notification
@@ -283,17 +288,17 @@ Route::group(['prefix' => '/user', 'middleware' => ['user']], function () {
     Route::get('/order', [HomeController::class, 'orderIndex'])->name('user.order.index');
     Route::get('/order/show/{id}', [HomeController::class, 'orderShow'])->name('user.order.show');
     Route::delete('/order/delete/{id}', [HomeController::class, 'userOrderDelete'])->name('user.order.delete');
-    // Product Review
-    Route::get('/user-review', [HomeController::class, 'productReviewIndex'])->name('user.productreview.index');
-    Route::delete('/user-review/delete/{id}', [HomeController::class, 'productReviewDelete'])->name('user.productreview.delete');
-    Route::get('/user-review/edit/{id}', [HomeController::class, 'productReviewEdit'])->name('user.productreview.edit');
-    Route::patch('/user-review/update/{id}', [HomeController::class, 'productReviewUpdate'])->name('user.productreview.update');
+    // // Product Review
+    // Route::get('/user-review', [HomeController::class, 'productReviewIndex'])->name('user.productreview.index');
+    // Route::delete('/user-review/delete/{id}', [HomeController::class, 'productReviewDelete'])->name('user.productreview.delete');
+    // Route::get('/user-review/edit/{id}', [HomeController::class, 'productReviewEdit'])->name('user.productreview.edit');
+    // Route::patch('/user-review/update/{id}', [HomeController::class, 'productReviewUpdate'])->name('user.productreview.update');
 
-    // Post comment
-    Route::get('user-post/comment', [HomeController::class, 'userComment'])->name('user.post-comment.index');
-    Route::delete('user-post/comment/delete/{id}', [HomeController::class, 'userCommentDelete'])->name('user.post-comment.delete');
-    Route::get('user-post/comment/edit/{id}', [HomeController::class, 'userCommentEdit'])->name('user.post-comment.edit');
-    Route::patch('user-post/comment/udpate/{id}', [HomeController::class, 'userCommentUpdate'])->name('user.post-comment.update');
+    // // Post comment
+    // Route::get('user-post/comment', [HomeController::class, 'userComment'])->name('user.post-comment.index');
+    // Route::delete('user-post/comment/delete/{id}', [HomeController::class, 'userCommentDelete'])->name('user.post-comment.delete');
+    // Route::get('user-post/comment/edit/{id}', [HomeController::class, 'userCommentEdit'])->name('user.post-comment.edit');
+    // Route::patch('user-post/comment/udpate/{id}', [HomeController::class, 'userCommentUpdate'])->name('user.post-comment.update');
 
     // Password Change
     Route::get('change-password', [HomeController::class, 'changePassword'])->name('user.change.password.form');

@@ -45,10 +45,10 @@ class AdminSidebar extends Component
                 ['access' => 'Show Brand','title' => 'Brands', 'route' => 'brand.index',],
                 ['access' => 'Create Brand','title' => 'Add Brands', 'route' => 'brand.create']
             ]],
-            ['access' => 'Show Duration','title' => 'Duration', 'route' => 'duration.*', 'child' => [
-                ['access' => 'Show Duration','title' => 'Duration', 'route' => 'duration.index',],
-                ['access' => 'Create Duration','title' => 'Add Duration', 'route' => 'duration.create']
-            ]],
+            // ['access' => 'Show Duration','title' => 'Duration', 'route' => 'duration.*', 'child' => [
+            //     ['access' => 'Show Duration','title' => 'Duration', 'route' => 'duration.index',],
+            //     ['access' => 'Create Duration','title' => 'Add Duration', 'route' => 'duration.create']
+            // ]],
             ['access' => 'Show Shipping','title' => 'Shipping', 'route' => 'shipping.*', 'child' => [
                 ['access' => 'Show Shipping','title' => 'Shipping', 'route' => 'shipping.index',],
                 ['access' => 'Create Shipping','title' => 'Add Shipping', 'route' => 'shipping.create']
@@ -57,25 +57,25 @@ class AdminSidebar extends Component
                 ['access' => 'Show Order', 'title' => 'Order', 'route' => 'order.index',],
                 ['access' => 'Show Order Status', 'title' => 'Order Status', 'route' => 'order-status.index']
             ]],
-            ['access' => 'Show Review','title' => 'Reviews', 'route' => 'review.index', 'child' => []],
-            ['access' => 'Show Review','title' => 'Product Reviews', 'route' => 'productreview.index', 'child' => []],
+            // ['access' => 'Show Review','title' => 'Reviews', 'route' => 'review.index', 'child' => []],
+            // ['access' => 'Show Review','title' => 'Product Reviews', 'route' => 'productreview.index', 'child' => []],
         ]],
 
-        ['access' => ['Show Post', 'Show pCategory', 'Show Tag', 'Show Comment'],'title' => 'Posts', 'child' => [
-            ['access' => 'Show Post','title' => 'Posts', 'route' => 'post.*', 'child' => [
-                ['access' => 'Show Post','title' => 'Posts', 'route' => 'post.index'],
-                ['access' => 'Create Post','title' => 'Add Posts', 'route' => 'post.create']
-            ]],
-            ['access' => 'Show pCategory','title' => 'Category', 'route' => 'post-category.*', 'child' => [
-                ['access' => 'Show pCategory','title' => 'Category', 'route' => 'post-category.index'],
-                ['access' => 'Create pCategory','title' => 'Add Category', 'route' => 'post-category.create']
-            ]],
-            ['access' => 'Show Tag','title' => 'Tags', 'route' => 'post-tag.*', 'child' => [
-                ['access' => 'Show Tag','title' => 'Tags', 'route' => 'post-tag.index'],
-                ['access' => 'Create Tag','title' => 'Add Tags', 'route' => 'post-tag.create']
-            ]],
-            ['access' => 'Show Comment','title' => 'Comments', 'route' => 'comment.index', 'child' => []],
-        ]],
+        // ['access' => ['Show Post', 'Show pCategory', 'Show Tag', 'Show Comment'],'title' => 'Posts', 'child' => [
+        //     ['access' => 'Show Post','title' => 'Posts', 'route' => 'post.*', 'child' => [
+        //         ['access' => 'Show Post','title' => 'Posts', 'route' => 'post.index'],
+        //         ['access' => 'Create Post','title' => 'Add Posts', 'route' => 'post.create']
+        //     ]],
+        //     ['access' => 'Show pCategory','title' => 'Category', 'route' => 'post-category.*', 'child' => [
+        //         ['access' => 'Show pCategory','title' => 'Category', 'route' => 'post-category.index'],
+        //         ['access' => 'Create pCategory','title' => 'Add Category', 'route' => 'post-category.create']
+        //     ]],
+        //     ['access' => 'Show Tag','title' => 'Tags', 'route' => 'post-tag.*', 'child' => [
+        //         ['access' => 'Show Tag','title' => 'Tags', 'route' => 'post-tag.index'],
+        //         ['access' => 'Create Tag','title' => 'Add Tags', 'route' => 'post-tag.create']
+        //     ]],
+        //     ['access' => 'Show Comment','title' => 'Comments', 'route' => 'comment.index', 'child' => []],
+        // ]],
 
         //Report
         ['access' => ['Sales Report', 'Customer Purchase History', 'Order Report', 'Inventory Report'],'title' => 'Report', 'child' => [
@@ -101,12 +101,12 @@ class AdminSidebar extends Component
         ]],
 
         ['access' => ['Show Cupon', 'Show User', 'Setting'],'title' => 'General Settings', 'child' => [
-            ['access' => 'Show SEO', 'title' => 'SEO', 'route' => 'seo.*', 'child' => [
-                ['access' => 'Show Google Tag', 'title' => 'Google', 'route' => 'seo.gtag.index'],
-                ['access' => 'Show Pixel', 'title' => 'Pixel', 'route' => 'seo.pixel.index'],
-            ]],
+            // ['access' => 'Show SEO', 'title' => 'SEO', 'route' => 'seo.*', 'child' => [
+            //     ['access' => 'Show Google Tag', 'title' => 'Google', 'route' => 'seo.gtag.index'],
+            //     ['access' => 'Show Pixel', 'title' => 'Pixel', 'route' => 'seo.pixel.index'],
+            // ]],
 
-            ['access' => 'Show Cupon','title' => 'Coupon', 'route' => 'coupon.index', 'child' => []],
+            // ['access' => 'Show Cupon','title' => 'Coupon', 'route' => 'coupon.index', 'child' => []],
 
             ['access' => 'Show User','title' => 'User Management', 'route' => 'auser.*', 'child' => [
                 ['access' => 'Show User','title' => 'Users', 'route' => 'auser.users.index'],

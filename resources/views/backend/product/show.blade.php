@@ -8,28 +8,9 @@
     <div class="card">
         <div class="card-header" style="display: flex !important ; justify-content: space-between; align-items: center">
             <h2>Product</h2>
-            <h2>
-                @if ($product->upcomming)
-                    <span class="badge badge-success">UP COMMING <span
-                            class="ml-4 badge badge-warning">{{ date('d-m-y', strtotime($product->upcomming)) }}</span>
-                    </span>
-                    {{-- <span class="ml-5 badge badge-warning">{{$product->upcomming}}</span> --}}
-                @else
-                    @if ($product->stock > 0)
-                        <span class="badge badge-success">IN STOCK</span>
-                    @else
-                        <span class="badge badge-warning">OUT OF STOCK</span>
-                    @endif
-                @endif
-
-            </h2>
-
-            {{-- <a href="{{ route('order.pdf', $product->id) }}" class="shadow-sm d btn btn-sm btn-primary"
-                style="display: inline-block"><i class="fas fa-download fa-sm text-white-50"></i>
-                Generate PDF</a> --}}
             <a href="{{ url()->previous() }}" class="shadow-sm d btn btn-sm btn-primary" style="display: inline-block">
-                {{-- <i class="fas fa-right-arrow fa-sm text-white-50"></i> --}}
-                Back</a>
+                Back
+            </a>
         </div>
         <div class="card-body">
             @if ($product)
@@ -38,10 +19,9 @@
                         <tr>
                             <th>Title</th>
                             <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Discount</th>
-                            <th>Final Price</th>
-                            <th>Inventory Cost</th>
+                            <th>Branch</th>
+                            <th>Total Buying Cost</th>
+                            <th>Final selling Price</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -50,10 +30,9 @@
                         <tr>
                             <td>{{ $product->title }}</td>
                             <td>{{ $product->stock }}</td>
-                            <td>৳{{ $product->price }}</td>
-                            <td>{{ $product->discount }}%</td>
+                            <td>{{ $product->Branch->name }}</td>
+                            <td>৳{{ $product->inventory_cost + $product->dollar_cost + $product->other_cost }}</td>
                             <td>৳{{ $product->final_price }}</td>
-                            <td>৳{{ $product->inventory_cost }}</td>
                             <td>
                                 @if ($product->status == 'active')
                                     <span class="badge badge-success">{{ $product->status }}</span>
@@ -89,247 +68,58 @@
 
                                     <table class="table">
                                         <tr class="">
-                                            <td>Slug</td>
-                                            <td> : {{ $product->slug }}</td>
+                                            <td>Code</td>
+                                            <td> : {{ $product->code }}</td>
                                         </tr>
                                         <tr class="">
-                                            <td>Model</td>
-                                            <td> : {{ $product->model }}</td>
+                                            <td>Inventory Cost</td>
+                                            <td> : {{ $product->inventory_cost }}</td>
                                         </tr>
                                         <tr class="">
-                                            <td>MPN</td>
-                                            <td> : {{ $product->mpn }}</td>
+                                            <td>Dollar cost</td>
+                                            <td> : {{ $product->dollar_cost }}</td>
                                         </tr>
                                         <tr class="">
-                                            <td>Category</td>
-                                            <td> : {{ $product->cat_info?->title }}</td>
+                                            <td>Other Cost</td>
+                                            <td> : {{ $product->other_cost }}</td>
                                         </tr>
                                         <tr>
-                                            <td>Sub-category</td>
-                                            <td> : {{ $product->sub_cat_info?->title }} </td>
+                                            <td>Selling Pirce</td>
+                                            <td> : {{ $product->price }} </td>
                                         </tr>
                                         <tr>
-                                            <td>Brand</td>
-                                            <td> : {{ $product->brand?->title }}</td>
+                                            <td>Discount</td>
+                                            <td> : {{ $product->discount }}</td>
                                         </tr>
                                         <tr>
                                             <td>Stock</td>
                                             <td> : {{ $product->stock }}</td>
                                         </tr>
                                         <tr>
-                                            <td>Average Rating</td>
-                                            <td> : {{ $product->average_rating }}</td>
+                                            <td>Branch</td>
+                                            <td> : {{ $product->Branch->name }}</td>
                                         </tr>
                                         <tr>
-                                            <td>Views</td>
-                                            <td> : {{ $product->views }}</td>
+                                            <td>Size</td>
+                                            <td> : {{ $product->Size->name }}</td>
                                         </tr>
                                         <tr>
-                                            <td>Product Offer</td>
+                                            <td>Color</td>
                                             <td> :
-                                                {{ $product->ProductOffer?->title . ' (' . $product->ProductOffer?->title . 'to' . $product->ProductOffer?->to }})
+                                                {{ $product->Color->name }})
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td>Is Featured</td>
-                                            <td> : {{ $product->is_featured == 1 ? 'Yes' : 'No' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Special features</td>
-                                            <td> : {{ $product->special_feature }}</td>
-                                        </tr>
                                     </table>
                                 </div>
 
-                                {{-- Memory attributes  --}}
-                                <div class="order-info">
-                                    <h4 class="pb-4 text-center">Memory Attributes</h4>
-                                    <table class="table">
-                                        <tr>
-                                            <td>RAM</td>
-                                            <td> : {{ $product->ram?->ram }} GB</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Memory Type</td>
-                                            <td> : {{ $product->m_type }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Bus Speed</td>
-                                            <td> : {{ $product->bus_speed }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Memory Slot</td>
-                                            <td> : {{ $product->m_slot }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Memory Removal</td>
-                                            <td> : {{ $product->m_removal ? 'Yes' : 'No' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Other Features</td>
-                                            <td> : {{ $product->m_other }}</td>
-                                        </tr>
-
-                                    </table>
-                                </div>
-
-                                {{-- Storage attributes  --}}
-                                <div class="order-info">
-                                    <h4 class="pb-4 text-center">Storage Attributes</h4>
-                                    <table class="table">
-                                        <tr>
-                                            <td>Storage</td>
-                                            <td> :
-                                                {{ $product->ssd?->name . ' ' . ($product->hdd ? ', ' . $product->hdd->name : '') }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Memory Type</td>
-                                            <td> : {{ $product->ssd ? 'SSD' : '' }}{{ $product->hdd ? ', HDD' : '' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Bus Speed</td>
-                                            <td> : {{ $product->bus_speed }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Memory Slot</td>
-                                            <td> : {{ $product->m_slot }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Extra Slot</td>
-                                            <td> : {{ $product->s_extra_m2_slot ? 'Yes' : 'No' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Storage Support Type</td>
-                                            <td> : {{ $product->s_support_type }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Sotrage Upgrate Note</td>
-                                            <td> : {{ $product->s_upgrade }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Other Features</td>
-                                            <td> : {{ $product->stor_other }}</td>
-                                        </tr>
-                                    </table>
-                                </div>
-
-                                {{-- Graphics attributes  --}}
-                                <div class="order-info">
-                                    <h4 class="pb-4 text-center">Graphic Attributes</h4>
-                                    <table class="table">
-                                        <tr>
-                                            <td>Graphic Model</td>
-                                            <td> : {{ $product->g_model }}</td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Graphic Card</td>
-                                            <td> : {{ $product->Graphic?->name }}</td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Other Features</td>
-                                            <td> : {{ $product->g_other }}</td>
-                                        </tr>
-                                    </table>
-                                </div>
-
-                                {{-- Software attributes  --}}
-                                <div class="order-info">
-                                    <h4 class="pb-4 text-center">Software Attributes</h4>
-                                    <table class="table">
-                                        <tr>
-                                            <td>Operating System</td>
-                                            <td> : {{ $product->operating_system }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Other Features</td>
-                                            <td> : {{ $product->g_other }}</td>
-                                        </tr>
-                                    </table>
-                                </div>
-
-                                {{-- Power attributes  --}}
-                                <div class="order-info">
-                                    <h4 class="pb-4 text-center">Power Attributes</h4>
-                                    <table class="table">
-                                        <tr>
-                                            <td>Battery Type</td>
-                                            <td> : {{ $product->battery_type }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Battery Capacity</td>
-                                            <td> : {{ $product->battery_capacity }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Adapter Type</td>
-                                            <td> : {{ $product->adapter_type }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Other Features</td>
-                                            <td> : {{ $product->power_other }}</td>
-                                        </tr>
-                                    </table>
-                                </div>
-
-
-                                {{-- Physical Specification  --}}
-                                <div class="order-info">
-                                    <h4 class="pb-4 text-center">Physical Specification</h4>
-                                    <table class="table">
-                                        <tr>
-                                            <td>Color</td>
-                                            <td> : {{ $product->color }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Color</td>
-                                            <td> : {{ $product->dimension }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Color</td>
-                                            <td> : {{ $product->weight }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Other Features</td>
-                                            <td> : {{ $product->physi_other }}</td>
-                                        </tr>
-                                    </table>
-                                </div>
-
-
-                                {{-- Warranty attributes  --}}
-                                <div class="order-info">
-                                    <h4 class="pb-4 text-center">Warranty Attributes</h4>
-                                    <table class="table">
-                                        <tr>
-                                            <td>Replacement Warranty</td>
-                                            <td> : {{ $product->replacement_warranty }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Motherboard Warranty</td>
-                                            <td> : {{ $product->motherboard_warranty }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Service Warranty</td>
-                                            <td> : {{ $product->service_warranty }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Warranty Details</td>
-                                            <td> : {{ $product->w_details }}</td>
-                                        </tr>
-                                    </table>
-                                </div>
                             </div>
 
                             <div class="col-lg-6 col-lx-4">
                                 <div>
-                                    {{-- Processore Attributes  --}}
+                                    {{-- Buying Calculation  --}}
                                     <div class="shipping-info">
-                                        <h4 class="pb-4 text-center">Processor Attributes</h4>
-                                        {{-- <P>
-                                            {!! $product->summary !!}
-                                        </P> --}}
+                                        <h4 class="pb-4 text-center">Buying Calculation</h4>
+{{--
                                         <table class="table">
                                             <tr>
                                                 <td>Processor Model</td>
@@ -371,26 +161,15 @@
                                                 <td>Others Info</td>
                                                 <td> : {{ $product->p_other }}</td>
                                             </tr>
-                                            {{-- <tr>
-                                            <td>HDD</td>
-                                            <td> : {{ $product->hdd->name }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Graphic</td>
-                                            <td> : {{ $product->Graphic->name }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Special Features</td>
-                                            <td> : {{ $product->SpecialFeature->name }}</td>
-                                        </tr> --}}
-                                        </table>
+
+                                        </table> --}}
                                     </div>
 
-                                    {{-- Display Attributes  --}}
+                                    {{-- Selling Calculation  --}}
                                     <div class="">
                                         <div class="shipping-info">
-                                            <h4 class="pb-4 text-center">Display Attributes</h4>
-                                            <table class="table">
+                                            <h4 class="pb-4 text-center">Selling Calculation</h4>
+                                            {{-- <table class="table">
                                                 <tr>
                                                     <td>Display Type</td>
                                                     <td> : {{ $product->DisplayType?->name }}</td>
@@ -416,15 +195,15 @@
                                                     <td>Other Features</td>
                                                     <td> : {{ $product->d_other }}</td>
                                                 </tr>
-                                            </table>
+                                            </table> --}}
                                         </div>
                                     </div>
 
-                                    {{-- Keyboar & Touchpad Attributes  --}}
+                                    {{-- Loss/Profit Calculation  --}}
                                     <div class="">
                                         <div class="shipping-info">
-                                            <h4 class="pb-4 text-center">Keyboar & Touchpad Attributes</h4>
-                                            <table class="table">
+                                            <h4 class="pb-4 text-center">Loss Profit Calculation</h4>
+                                            {{-- <table class="table">
                                                 <tr>
                                                     <td>Keyboard Type</td>
                                                     <td> : {{ $product->k_type }}</td>
@@ -442,155 +221,11 @@
                                                     <td>Other Features</td>
                                                     <td> : {{ $product->k_other }}</td>
                                                 </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                    {{-- Camera & Audio Attributes  --}}
-                                    <div class="">
-                                        <div class="shipping-info">
-                                            <h4 class="pb-4 text-center">Camera & Audio Attributes</h4>
-                                            <table class="table">
-                                                <tr>
-                                                    <td>Webcam</td>
-                                                    <td> : {{ $product->webcam }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Microphone</td>
-                                                    <td> : {{ $product->microphone }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Speaker</td>
-                                                    <td> : {{ $product->speaker }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Other Features</td>
-                                                    <td> : {{ $product->ca_other }}</td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                    {{-- Ports & Slots Attributes  --}}
-                                    <div class="">
-                                        <div class="shipping-info">
-                                            <h4 class="pb-4 text-center">Ports & Slots Attributes</h4>
-                                            <table class="table">
-                                                <tr>
-                                                    <td>Optical Driver</td>
-                                                    <td> : {{ $product->optical_drive }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Card Reader</td>
-                                                    <td> : {{ $product->card_reader }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>HDMI Port</td>
-                                                    <td> : {{ $product->hdmi_p }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>USB2 Port</td>
-                                                    <td> : {{ $product->usb2_p }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>USB3 Port</td>
-                                                    <td> : {{ $product->usb3_p }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Type C Therderbold Port</td>
-                                                    <td> : {{ $product->type_c_tb_p }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Headphone Port</td>
-                                                    <td> : {{ $product->headphone_p }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Microphone Port</td>
-                                                    <td> : {{ $product->microphone_p }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Other Features</td>
-                                                    <td> : {{ $product->ps_other }}</td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                    {{-- Network & Connectivity Attributes  --}}
-                                    <div class="">
-                                        <div class="shipping-info">
-                                            <h4 class="pb-4 text-center">Network and Connectivity Attributes</h4>
-                                            <table class="table">
-                                                <tr>
-                                                    <td>WIFI</td>
-                                                    <td> : {{ $product->wifi }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Bluetooth</td>
-                                                    <td> : {{ $product->bluetooth }}</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>Other Features</td>
-                                                    <td> : {{ $product->k_other }}</td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-
-
-                                    {{-- Security Attributes  --}}
-                                    <div class="">
-                                        <div class="shipping-info">
-                                            <h4 class="pb-4 text-center">Security Attributes</h4>
-                                            <table class="table">
-                                                <tr>
-                                                    <td>Finger Print</td>
-                                                    <td> : {{ $product->finger_print }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Face Lock</td>
-                                                    <td> : {{ $product->facelock }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Other Features</td>
-                                                    <td> : {{ $product->s_other }}</td>
-                                                </tr>
-                                            </table>
+                                            </table> --}}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        {{-- Product Summery  --}}
-                        <div class="mt-4 row">
-                            <div class="col-12">
-                                {{-- Product's main attributes  --}}
-                                <div class="shipping-info">
-                                    <h4 class="pb-4 text-center">Product Summery</h4>
-                                    <P>
-                                        {!! $product->summary !!}
-                                    </P>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-                        <div class="mt-4 row">
-                            <div class="col-12">
-                                {{-- Product's main attributes  --}}
-                                <div class="order-info">
-                                    <h4 class="pb-4 text-center">Product Description</h4>
-                                    {{-- <h5 class="pb-4 text-center">Main Attributes</h5> --}}
-
-                                    <P>
-                                        {!! $product->description !!}
-                                    </P>
-                                </div>
-
-                            </div>
-
                         </div>
 
                 </section>
@@ -602,8 +237,7 @@
                             $photo = explode(',', $product->photo);
                         @endphp
                         @foreach ($photo as $pto)
-                            <img src="{{ $pto }}" class="mx-auto rounded img-fluid img-thumbnail"
-                                alt="...">
+                            <img src="{{ $pto }}" class="mx-auto rounded img-fluid img-thumbnail" alt="...">
                         @endforeach
                     </div>
                 </section>

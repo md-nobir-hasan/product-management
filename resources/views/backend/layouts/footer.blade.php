@@ -3,7 +3,7 @@
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Copyright &copy; <a href="https://lappyvalley.com" target="_blank">LappyValley</a> {{date('Y')}}</span>
+            <span>Copyright &copy; <a href="env('APP_URL')" target="_blank">{{env('APP_NAME')}}</a> {{date('Y')}}</span>
           </div>
         </div>
       </footer>

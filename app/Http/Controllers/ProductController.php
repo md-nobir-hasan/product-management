@@ -41,6 +41,7 @@ class ProductController extends Controller
     {
         $n['products'] = Product::with(['Color', 'Size', 'Branch'])->latest()->get();
         $n['count'] = DB::table('products')->get();
+        $n['branches'] =Branch::with('products')->get();
         return view('backend.product.index', $n);
     }
 

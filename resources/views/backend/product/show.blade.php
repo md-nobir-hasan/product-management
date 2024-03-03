@@ -29,7 +29,13 @@
                     <tbody>
                         <tr>
                             <td>{{ $product->title }}</td>
-                            <td>{{ $product->stock }}</td>
+                            <td>
+                                @if ($product->stock > 0)
+                                    <span class="badge badge-primary">{{ $product->stock }}</span>
+                                @else
+                                    <span class="badge badge-danger">Out of Stock</span>
+                                @endif
+                            </td>
                             <td>{{ $product->Branch->name }}</td>
                             <td>৳{{ $product->inventory_cost + $product->dollar_cost + $product->other_cost }}</td>
                             <td>৳{{ $product->final_price }}</td>
@@ -119,7 +125,7 @@
                                     {{-- Buying Calculation  --}}
                                     <div class="shipping-info">
                                         <h4 class="pb-4 text-center">Buying Calculation</h4>
-{{--
+                                        {{--
                                         <table class="table">
                                             <tr>
                                                 <td>Processor Model</td>

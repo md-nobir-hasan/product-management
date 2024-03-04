@@ -56,7 +56,7 @@ class ProductAttributeSeeder extends Seeder
             ['name'=>'M','measurement' => 13],
             ['name'=>'L','measurement' => 14],
             ['name'=>'XL','measurement' => 15],
-            ['name'=>'XXL','measurement' => 16],
+            ['name'=>'XXL','measurement' => 16], //5
         ];
         DB::table('sizes')->insert($size);
 
@@ -67,7 +67,7 @@ class ProductAttributeSeeder extends Seeder
             ['name' => 'black','code'=> '#000000'],
             ['name' => 'pink','code'=> '#ffc0cb'],
             ['name' => 'violet','code'=> '#ee82ee'],
-            ['name' => 'blue','code'=> '#0000ff'],
+            ['name' => 'blue','code'=> '#0000ff'], //7
         ];
         DB::table('colors')->insert($color);
 

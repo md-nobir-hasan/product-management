@@ -190,25 +190,25 @@ class CouponSeeder extends Seeder
         $order_status = [
             [
                 'title' => 'New',
-                'slug' => 'New',
+                'slug' => 'new',
                 'status' => 'active',
                 'delete'=>1,
             ],
             [
                 'title' => 'Pending',
-                'slug' => 'Pending',
+                'slug' => 'pending',
                 'status' => 'active',
                 'delete'=>1,
             ],
             [
                 'title' => 'Processing',
-                'slug' => 'Processing',
+                'slug' => 'processing',
                 'status' => 'active',
                 'delete'=>1,
             ],
             [
                 'title' => 'Delivered',
-                'slug' => 'Delivered',
+                'slug' => 'delivered',
                 'status' => 'active',
                 'delete'=>0,
             ],

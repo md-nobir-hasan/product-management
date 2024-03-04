@@ -236,6 +236,8 @@ class RolePermissionSeeder extends Seeder
 
             //Ami O single
             ['name' => 'Show SEO', 'guard_name' => 'web'],
+            ['name' => 'Show Selling Product', 'guard_name' => 'web'],
+            ['name' => 'Can Sell', 'guard_name' => 'web'],
         ];
         $epermissions = [
             //Banner
@@ -264,9 +266,9 @@ class RolePermissionSeeder extends Seeder
 
             //Order
             ['name' => 'Show Order'],
-            // ['name' => 'Create Order'],
+            ['name' => 'Create Order'],
             ['name' => 'Edit Order'],
-            // ['name' => 'Delete Order'],
+            ['name' => 'Delete Order'],
 
             //Review
             // ['name' => 'Show Review'],

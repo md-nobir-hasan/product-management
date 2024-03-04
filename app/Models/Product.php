@@ -31,7 +31,7 @@ class Product extends Model
         return $this->belongsTo(Size::class);
     }
 
-    public static function activeProduct()
+    public static function countActiveProduct()
     {
         $data = Product::where('status', 'active')->count();
         if ($data) {

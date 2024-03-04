@@ -213,6 +213,7 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
     // Product
     Route::resource('/product', ProductController::class)->middleware(['can:Show Product']);
 
+
     // Ajax for sub category
     Route::post('/category/{id}/child', [CategoryController::class, 'getChildByParent']);
 
@@ -232,6 +233,10 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
 
     // Order
     Route::resource('/order', OrderController::class);
+
+    //Selling the products
+    Route::get('/selling', [OrderController::class, 'create'])->name('selling');
+    // Route::get('/selling-confirm', [OrderController::class,'confirm'])->name('selling.confirm');
 
     // Order status
     Route::resource('/order-status', OrderStatusController::class);

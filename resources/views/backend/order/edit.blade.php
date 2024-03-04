@@ -6,37 +6,117 @@
 
 @section('main-content')
     <div class="card">
-
         <h5 class="card-header">Order Edit</h5>
         <div class="card-body">
-            <form action="{{ route('order.update', $order->id) }}" method="POST">
+            <form action="{{ route('order.update', 1) }}" method="POST">
                 @csrf
                 @method('PATCH')
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped" id="order-dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>S.N.</th>
+                                <th>Title</th>
+                                <th>Quantity</th>
+                                <th>Selling Price</th>
+                                <th>Discount</th>
+                                <th>Final Price</th>
+                                <th>Branch</th>
+                                <th>Order Status</th>
+                                {{-- <th>Payment Status</th> --}}
+                                {{-- @canany('Edit Order')
+                                    <th>Action</th>
+                                @endcanany --}}
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>S.N.</th>
+                                <th>Title</th>
+                                <th>Quantity</th>
+                                <th>Selling Price</th>
+                                <th>Discount</th>
+                                <th>Final price</th>
+                                <th>Branch</th>
+                                <th>Order Status</th>
+                                {{-- <th>Payment Status</th> --}}
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            @foreach ($new_orders as $order)
+                                <tr>
+                                    <td>
+                                        {{ $loop->iteration }}
+                                    </td>
+                                    <td>
+                                        {{ $order->product->title }}
+                                    </td>
+                                    <td>
+                                        <input type="number" name="order[{{ $loop->iteration }}][qty]" min="1"
+                                            max="9999" value="{{ $order->qty }}" class="form-control qty">
+                                        @error("order.$loop->iteration.qty")
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </td>
+                                    <td>
+                                        <input type="number" name="order[{{ $loop->iteration }}][selling_price]"
+                                            min="0" value="{{ $order->selling_price }}"
+                                            class="form-control selling_price">
+                                        @error("order.$loop->iteration.selling_price")
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </td>
+                                    <td>
+                                        <input type="number" name="order[{{ $loop->iteration }}][order_discount]"
+                                            value="{{ $order->order_discount }}" class="form-control order_discount">
+                                        @error("order.$loop->iteration.selling_price")
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </td>
+                                    <td>
+                                        <input type="number" name="order[{{ $loop->iteration }}][final_price]" i
+                                            min="0" value="{{ $order->final_price }}"
+                                            class="form-control final_price">
+                                        @error("order.$loop->iteration.final_price")
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </td>
+                                    <td>
+                                        <select name="order[{{ $loop->iteration }}][branch_id]" class="form-control">
+                                            <option value="">--Select Branch--</option>
+                                            @foreach ($branches as $branch)
+                                                <option value="{{ $branch->id }}" @selected($branch->id == old('branch_id'))>
+                                                    {{ $branch->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error("order.$loop->iteration.branch_id")
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </td>
 
-                <div class="form-group">
-                    <label for="payment_status">Payment Status :</label>
-                    <select name="payment_status" id="payment_status" class="form-control">
-                        <option value="paid" @selected($order->payment_status == 'paid')>paid</option>
-                        <option value="unpaid" @selected($order->payment_status == 'unpaid')>uppaid</option>
-                    </select>
-                    @error('payment_status')
-                        <span class="text-danger">{{$message}}</span>
-                    @enderror
+                                    <td>
+                                        <select name="order[{{ $loop->iteration }}][order_status_id]" class="form-control">
+                                            <option value="">--Select Order Status--</option>
+                                            @foreach ($order_statuses as $order_status)
+                                                <option value="{{ $order_status->id }}" @selected($order_status->id == old('order_status_id'))>
+                                                    {{ $order_status->title }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error("order.$loop->iteration.order_status_id")
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
 
-                <div class="form-group">
-                    <label for="order_status_id">Status :</label>
-                    <select name="order_status_id" id="order_status_id" class="form-control">
-                        @foreach ($order_status as $item)
-                            <option value="{{ $item->title }}" @selected($order->status == $item->title)>{{ $item->title }}</option>
-                        @endforeach
-                    </select>
-                    @error('order_status_id')
-                    <span class="text-danger">{{$message}}</span>
-                @enderror
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-primary">Update</button>
                 </div>
-
-                <button type="submit" class="btn btn-primary">Update</button>
             </form>
         </div>
     </div>
@@ -55,4 +135,53 @@
             text-decoration: underline;
         }
     </style>
+@endpush
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('.selling_price').each(function(index) {
+                $(this).on('keyup change', function() {
+                    let price = $('.selling_price').eq(index).val() ? $('.selling_price').eq(index)
+                        .val() : '0';
+                    let discount = $('.order_discount').eq(index).val() ? $('.order_discount').eq(
+                        index).val() : 0;
+                    let qty = Number($('.qty').eq(index).val() ? $('.qty').eq(
+                        index).val() : 0);
+                    let final_price = Number(price) - Number(discount);
+
+                    $('.final_price').eq(index).val(final_price * qty);
+                });
+            });
+
+            $('.order_discount').each(function(index) {
+                $(this).on('keyup change', function() {
+                    let price = $('.selling_price').eq(index).val() ? $('.selling_price').eq(index)
+                        .val() : '0';
+                    let discount = $('.order_discount').eq(index).val() ? $('.order_discount').eq(
+                        index).val() : 0;
+                    let qty = Number($('.qty').eq(index).val() ? $('.qty').eq(
+                        index).val() : 0);
+                    let final_price = Number(price) - Number(discount);
+
+                    $('.final_price').eq(index).val(final_price * qty);
+                });
+            });
+
+            $('.qty').each(function(index) {
+                $(this).on('change keyup', function() {
+                    let price = $('.selling_price').eq(index).val() ? $('.selling_price').eq(index)
+                        .val() : '0';
+                    let discount = $('.order_discount').eq(index).val() ? $('.order_discount').eq(
+                        index).val() : 0;
+                    let qty = Number($('.qty').eq(index).val() ? $('.qty').eq(
+                        index).val() : 0);
+                    let final_price = Number(price) - Number(discount);
+
+                    $('.final_price').eq(index).val(final_price * qty);
+                });
+            })
+
+        })
+    </script>
 @endpush

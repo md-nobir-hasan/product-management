@@ -5,14 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\Order;
-use App\Models\OrderStatus;
-use App\Models\Shipping;
-use App\User;
 use PDF;
-use Notification;
-use App\Http\Helper;
+use App\Http\Requests\StoreOrderRequests;
+use App\Http\Requests\UpdateOrderRequests;
+use App\Models\Product;
 use Illuminate\Support\Str;
-use App\Notifications\StatusNotification;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -40,7 +38,13 @@ class OrderController extends Controller
      */
     public function create()
     {
-        //
+        $n['products'] = Product::with(['Color', 'Size', 'Branch'])
+            ->where('status', 'active')
+            ->where('stock', '>', 0)
+            ->latest()
+            ->get();
+
+        return view('backend.selling.index', $n);
     }
 
     /**
@@ -49,82 +53,43 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreOrderRequests $request)
     {
         $this->ccan('Create Order');
 
-        $this->validate($request, [
-            'first_name' => 'string|required',
-            'last_name' => 'string|required',
-            'address1' => 'string|required',
-            'address2' => 'string|nullable',
-            'coupon' => 'nullable|numeric',
-            'phone' => 'numeric|required',
-            'post_code' => 'string|nullable',
-            'email' => 'string|required'
-        ]);
-
-        if (empty(Cart::where('user_id', auth()->user()->id)->where('order_id', null)->first())) {
-            request()->session()->flash('error', 'Cart is Empty !');
-            return back();
-        }
-
-        $order = new Order();
-        $order_data = $request->all();
-        $order_data['order_number'] = 'ORD-' . strtoupper(Str::random(10));
-        $order_data['user_id'] = $request->user()->id;
-        $order_data['shipping_id'] = $request->shipping;
-        $shipping = Shipping::where('id', $order_data['shipping_id'])->pluck('price');
-        // return session('coupon')['value'];
-        $order_data['sub_total'] = Helper::totalCartPrice();
-        $order_data['quantity'] = Helper::cartCount();
-        if (session('coupon')) {
-            $order_data['coupon'] = session('coupon')['value'];
-        }
-        if ($request->shipping) {
-            if (session('coupon')) {
-                $order_data['total_amount'] = Helper::totalCartPrice() + $shipping[0] - session('coupon')['value'];
-            } else {
-                $order_data['total_amount'] = Helper::totalCartPrice() + $shipping[0];
+        $data = $request->validated();
+        $order_number = 'ORD-' . rand(1, 999) . strtoupper(Str::random(10));
+        $user_id = Auth()->user()->id;
+        foreach ($data['product'] as $key => $product) {
+            $qty = (int)$product['qty'];
+            $db_product = DB::table('products')->find($product['id']);
+            if (!($qty <= $db_product->stock)) {
+                request()->session()->flash('error', "Insufficient stock (S.L $key)");
+                return back();
             }
-        } else {
-            if (session('coupon')) {
-                $order_data['total_amount'] = Helper::totalCartPrice() - session('coupon')['value'];
-            } else {
-                $order_data['total_amount'] = Helper::totalCartPrice();
-            }
-        }
-        // return $order_data['total_amount'];
-        $order_data['status'] = "new";
-        if (request('payment_method') == 'paypal') {
-            $order_data['payment_method'] = 'paypal';
-            $order_data['payment_status'] = 'paid';
-        } else {
-            $order_data['payment_method'] = 'cod';
-            $order_data['payment_status'] = 'Unpaid';
-        }
-        $order->fill($order_data);
-        $status = $order->save();
-        if ($order)
-            // dd($order->id);
-            $users = User::where('role', 'admin')->first();
-        $details = [
-            'title' => 'New order created',
-            'actionURL' => route('order.show', $order->id),
-            'fas' => 'fa-file-alt'
-        ];
-        Notification::send($users, new StatusNotification($details));
-        if (request('payment_method') == 'paypal') {
-            return redirect()->route('payment')->with(['id' => $order->id]);
-        } else {
-            session()->forget('cart');
-            session()->forget('coupon');
-        }
-        Cart::where('user_id', auth()->user()->id)->where('order_id', null)->update(['order_id' => $order->id]);
 
-        // dd($users);
-        request()->session()->flash('success', 'Your Order successfully placed in order');
-        return redirect()->route('home');
+            if ($qty > 0) {
+                for ($i = 1;  $i < $qty+1; $i++) {
+                    DB::table('orders')->insert([
+                        'order_number' => $order_number,
+                        'product_id' => $db_product->id,
+                        'qty' => 1,
+                        'inventory_cost' => $db_product->inventory_cost,
+                        'dollar_cost' => $db_product->dollar_cost,
+                        'other_cost' => $db_product->other_cost,
+                        'price' => $db_product->price,
+                        'discount' => $db_product->discount,
+                        'selling_price' => $db_product->final_price,
+                        'order_discount' => 0,
+                        'final_price' => $db_product->final_price,
+                        'user_id' => $user_id,
+                    ]);
+                }
+                DB::table('products')->where('id', $product['id'])->decrement('stock', $qty);
+            }
+
+        }
+        return to_route('order.edit', [$order_number]);
     }
 
     /**
@@ -151,9 +116,16 @@ class OrderController extends Controller
     public function edit($id)
     {
         $this->ccan('Edit Order');
+        $n['new_orders'] = Order::with('product')->where('order_number', $id)->get();
+        $n['branches'] = DB::table("branches")->get();
+        $n['order_statuses'] = DB::table("order_statuses")
+            ->where('status', 'active')
+            ->select('id', 'title')
+            ->get();
+        if (count($n['new_orders']) < 1) {
+            return to_route('selling');
+        }
 
-        $n['order'] = Order::find($id);
-        $n['order_status'] = OrderStatus::where('status', 'active')->get();
         return view('backend.order.edit', $n);
     }
 
@@ -164,9 +136,11 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateOrderRequests $request, $id)
     {
         $this->ccan('Edit Order');
+        $data = $this->validated();
+        dd($data);
         $order = Order::find($id);
         $validator = $this->validate($request, [
             'payment_status' => ['required', 'in:paid,unpaid'],
@@ -182,7 +156,7 @@ class OrderController extends Controller
                     $product->save();
                 }
                 $status = $order->fill($validator)->save();
-            } elseif($request->payment_status == 'unpaid' && $order->payment_status == 'paid') {
+            } elseif ($request->payment_status == 'unpaid' && $order->payment_status == 'paid') {
                 $carts = Cart::with('product')->where('order_id', $order->id)->get();
                 foreach ($carts as $cart) {
                     $product = $cart->product;
@@ -190,7 +164,7 @@ class OrderController extends Controller
                     $product->save();
                 }
                 $status = $order->fill($validator)->save();
-            }else{
+            } else {
                 $status = true;
             }
             if ($status) {

@@ -41,6 +41,7 @@ class AdminSidebar extends Component
                 ['title' => 'Products', 'route' => 'product.index', 'access' => 'Show Product',],
                 ['title' => 'Add Products', 'route' => 'product.create','access'=>'Create Product',]
             ]],
+            ['title' => 'Selling', 'route' => 'selling', 'access'=>'Show Selling Product', 'child' => []],
             ['access' => 'Show Brand','title' => 'Brands', 'route' => 'brand.*', 'child' => [
                 ['access' => 'Show Brand','title' => 'Brands', 'route' => 'brand.index',],
                 ['access' => 'Create Brand','title' => 'Add Brands', 'route' => 'brand.create']

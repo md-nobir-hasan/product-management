@@ -11,12 +11,11 @@ class Order extends Model
      'payment_status','shipping_id','coupon', 'order_status_id','divission_id', 'status', 'transaction_id',
         'currency', 'city', 'inventory_cost'];
 
-    public function cart_info(){
-        return $this->hasMany('App\Models\Cart','order_id','id');
-    }
+
     public static function getAllOrder($id){
         return Order::with('cart_info')->find($id);
     }
+
     public static function countActiveOrder(){
         $data=Order::count();
         if($data){
@@ -24,12 +23,13 @@ class Order extends Model
         }
         return 0;
     }
-    public function cart(){
-        return $this->hasMany(Cart::class);
-    }
+
 
     public function shipping(){
         return $this->belongsTo(Shipping::class,'shipping_id');
+    }
+    public function product(){
+        return $this->belongsTo(Product::class);
     }
     public function user()
     {
@@ -39,14 +39,7 @@ class Order extends Model
     {
         return $this->belongsTo(OrderStatus::class);
     }
-    public function divission()
-    {
-        return $this->belongsTo(Divission::class);
-    }
 
-    public function total(){
-        return count($this->all());
-    }
     public function pending(){
         return count($this->where('status','Pending')->get());
     }
@@ -57,8 +50,5 @@ class Order extends Model
         return count($this->where('status','Cancelled')->get());
     }
 
-    public function installment_order():HasMany{
-        return $this->hasMany(InstallmentOrder::class);
-    }
 
 }

@@ -19,8 +19,8 @@
           <div class="card-body">
             <div class="row no-gutters align-items-center">
               <div class="mr-2 col">
-                <div class="mb-1 text-xs font-weight-bold text-primary text-uppercase">Category</div>
-                <div class="mb-0 text-gray-800 h5 font-weight-bold">{{\App\Models\Category::countActiveCategory()}}</div>
+                <div class="mb-1 text-xs font-weight-bold text-primary text-uppercase"><a href="{{route('pa.branch.index')}}">Branches</a></div>
+                <div class="mb-0 text-gray-800 h5 font-weight-bold">{{$branches->count()}}</div>
               </div>
               <div class="col-auto">
                 <i class="text-gray-300 fas fa-sitemap fa-2x"></i>
@@ -36,8 +36,8 @@
           <div class="card-body">
             <div class="row no-gutters align-items-center">
               <div class="mr-2 col">
-                <div class="mb-1 text-xs font-weight-bold text-success text-uppercase">Products</div>
-                <div class="mb-0 text-gray-800 h5 font-weight-bold">{{\App\Models\Product::countActiveProduct()}}</div>
+                <div class="mb-1 text-xs font-weight-bold text-success text-uppercase"><a href="{{route('product.index')}}">Products</a></div>
+                <div class="mb-0 text-gray-800 h5 font-weight-bold">{{$products->count()}}</div>
               </div>
               <div class="col-auto">
                 <i class="text-gray-300 fas fa-cubes fa-2x"></i>
@@ -53,10 +53,10 @@
           <div class="card-body">
             <div class="row no-gutters align-items-center">
               <div class="mr-2 col">
-                <div class="mb-1 text-xs font-weight-bold text-info text-uppercase">Order</div>
+                <div class="mb-1 text-xs font-weight-bold text-info text-uppercase">Product Sold Out</div>
                 <div class="row no-gutters align-items-center">
                   <div class="col-auto">
-                    <div class="mb-0 mr-3 text-gray-800 h5 font-weight-bold">{{\App\Models\Order::countActiveOrder()}}</div>
+                    <div class="mb-0 mr-3 text-gray-800 h5 font-weight-bold">{{$orders->where('order_status','Delivered')->count()}}</div>
                   </div>
 
                 </div>
@@ -75,8 +75,8 @@
           <div class="card-body">
             <div class="row no-gutters align-items-center">
               <div class="mr-2 col">
-                <div class="mb-1 text-xs font-weight-bold text-warning text-uppercase">Post</div>
-                <div class="mb-0 text-gray-800 h5 font-weight-bold">{{\App\Models\Post::countActivePost()}}</div>
+                <div class="mb-1 text-xs font-weight-bold text-warning text-uppercase">Pending</div>
+                <div class="mb-0 text-gray-800 h5 font-weight-bold">{{$orders->where('order_status','Pending')->count()}}</div>
               </div>
               <div class="col-auto">
                 <i class="text-gray-300 fas fa-folder fa-2x"></i>

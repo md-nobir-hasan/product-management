@@ -11,6 +11,7 @@ use Hash;
 use Carbon\Carbon;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 class AdminController extends Controller
 {
@@ -25,9 +26,11 @@ class AdminController extends Controller
      {
        $array[++$key] = [$value->day_name, $value->count];
      }
-    //  dd($array,$data);
-    //  return $data;
-     return view('backend.index')->with('users', json_encode($array));
+     $n['users'] = json_encode($array);
+     $n['branches'] =DB::table('branches')->get();
+     $n['products'] =DB::table('products')->where('status','active')->get();
+     $n['orders'] =DB::table('orders')->get();
+     return view('backend.index',$n);
     }
 
     public function profile(){

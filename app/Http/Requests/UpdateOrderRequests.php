@@ -22,12 +22,13 @@ class UpdateOrderRequests extends FormRequest
     public function rules(): array
     {
         return [
-            'qty' => ['required', 'integer'],
-            'selling_price' => ['required', 'numeric', 'max:99999999', 'min:0'],
-            'order_discount' => ['required', 'numeric', 'max:99999999', 'min:0'],
-            'final_price' => ['required', 'numeric', 'max:99999999', 'min:0'],
-            'branch_id' => ['required', 'exists:branches,id'],
-            'order_status' => ['required', 'string'],
+            'order.*.id' => ['required', 'integer',"exists:orders,id"],
+            'order.*.qty' => ['required', 'integer'],
+            'order.*.selling_price' => ['required', 'numeric', 'max:99999999', 'min:0'],
+            'order.*.order_discount' => ['required', 'numeric', 'max:99999999', 'min:0'],
+            'order.*.final_price' => ['required', 'numeric', 'max:99999999', 'min:0'],
+            'order.*.branch_id' => ['required', 'exists:branches,id'],
+            'order.*.order_status' => ['required', 'string'],
         ];
     }
 }

@@ -26,8 +26,8 @@ class OrderController extends Controller
     public function index()
     {
         $this->ccan('Show Order');
-        $n['orders'] = Order::with(['order_status', 'shipping'])->orderBy('id', 'desc')->paginate(10);
-        $n['count'] = Order::get();
+        $n['orders'] = Order::with(['product', 'Branch'])->orderBy('id', 'desc')->paginate(10);
+        $n['count'] = DB::table("orders")->get();
         return view('backend.order.index', $n);
     }
 
@@ -69,7 +69,7 @@ class OrderController extends Controller
             }
 
             if ($qty > 0) {
-                for ($i = 1;  $i < $qty+1; $i++) {
+                for ($i = 1; $i < $qty + 1; $i++) {
                     DB::table('orders')->insert([
                         'order_number' => $order_number,
                         'product_id' => $db_product->id,
@@ -87,7 +87,6 @@ class OrderController extends Controller
                 }
                 DB::table('products')->where('id', $product['id'])->decrement('stock', $qty);
             }
-
         }
         return to_route('order.edit', [$order_number]);
     }
@@ -116,7 +115,13 @@ class OrderController extends Controller
     public function edit($id)
     {
         $this->ccan('Edit Order');
-        $n['new_orders'] = Order::with('product')->where('order_number', $id)->get();
+        $id_check = (int)$id;
+        if(is_int($id_check)>0){
+            $n['new_orders'] = Order::with('product')->where('id', $id_check)->get();
+        }else{
+            $n['new_orders'] = Order::with('product')->where('order_number', $id)->get();
+        }
+
         $n['branches'] = DB::table("branches")->get();
         $n['order_statuses'] = DB::table("order_statuses")
             ->where('status', 'active')
@@ -125,7 +130,6 @@ class OrderController extends Controller
         if (count($n['new_orders']) < 1) {
             return to_route('selling');
         }
-
         return view('backend.order.edit', $n);
     }
 
@@ -139,41 +143,20 @@ class OrderController extends Controller
     public function update(UpdateOrderRequests $request, $id)
     {
         $this->ccan('Edit Order');
-        $data = $this->validated();
-        dd($data);
-        $order = Order::find($id);
-        $validator = $this->validate($request, [
-            'payment_status' => ['required', 'in:paid,unpaid'],
-            'order_status_id' => 'required|exists:order_statuses,title',
-        ]);
-        if ($order) {
-            //What the request want
-            if ($request->payment_status == 'paid' && $order->payment_status == 'upaid') {
-                $carts = Cart::with('product')->where('order_id', $order->id)->get();
-                foreach ($carts as $cart) {
-                    $product = $cart->product;
-                    $product->stock = $product->stock - $cart->quantity;
-                    $product->save();
-                }
-                $status = $order->fill($validator)->save();
-            } elseif ($request->payment_status == 'unpaid' && $order->payment_status == 'paid') {
-                $carts = Cart::with('product')->where('order_id', $order->id)->get();
-                foreach ($carts as $cart) {
-                    $product = $cart->product;
-                    $product->stock = $product->stock + $cart->quantity;
-                    $product->save();
-                }
-                $status = $order->fill($validator)->save();
-            } else {
-                $status = true;
-            }
-            if ($status) {
-                request()->session()->flash('success', 'Successfully updated order');
-            } else {
-                request()->session()->flash('error', 'Error while updating order');
-            }
-            return redirect()->route('order.index');
+        $data = $request->validated();
+        foreach ($data['order'] as $key => $order) {
+            $order = DB::table('orders')->where('id',$order['id'])->update([
+                'qty' => $order['qty'],
+                'selling_price' => $order['selling_price'],
+                'order_discount' => $order['order_discount'],
+                'final_price' => $order['final_price'],
+                'branch_id' => $order['branch_id'],
+                'order_status' => $order['order_status'],
+            ]);
         }
+
+        request()->session()->flash('success', 'Successfully updated order');
+        return redirect()->route('order.index');
     }
 
     /**

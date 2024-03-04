@@ -12,24 +12,32 @@
         </div>
         <div class="py-3 card-header d-flex justify-content-between">
             <h6 class="float-left m-0 font-weight-bold text-primary">Order Lists</h6>
-            <h6 class="font-weight-bold text-primary">Total: {{ count($count) }} || Active:
-                {{ count($count->where('status', 'active')) }} || Inactive: {{ count($count->where('status', 'inactive')) }}
+            <h6 class="font-weight-bold text-primary">
+                Total: {{ count($count) }} ||
+                Delivered: {{ count($count->where('order_status', 'Delivered')) }} ||
+                Cancelled: {{ count($count->where('order_status', 'Canceled')) }} ||
+                New: {{ count($count->where('order_status', 'New')) }} ||
+                Pending: {{ count($count->where('order_status', 'Pending')) }}
+                Processing: {{ count($count->where('order_status', 'Processing')) }}
+            </h6>
+            <h6>
+                <a href="{{route('selling')}}"><button type="button" class="btn btn-primary">Go to Selling</button> </a>
             </h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 @if (count($orders) > 0)
-                    <table class="table table-bordered table-striped" id="order-dataTable" width="100%" cellspacing="0">
+                    <table class="table table-bordered table-striped text-center" id="order-dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th>S.N.</th>
-                                <th>Order No.</th>
-                                <th>Name</th>
-                                <th>Email</th>
+                                <th>Title</th>
+                                <th>Code</th>
                                 <th>Quantity</th>
-                                <th>Charge</th>
+                                <th>Branch</th>
+                                <th>Selling Price</th>
+                                <th>Discount</th>
                                 <th>Total Amount</th>
-                                <th>Payment Status</th>
                                 <th>Status</th>
                                 @canany(['Edit Order', 'Delete Order'])
                                     <th>Action</th>
@@ -39,13 +47,13 @@
                         <tfoot>
                             <tr>
                                 <th>S.N.</th>
-                                <th>Order No.</th>
-                                <th>Name</th>
-                                <th>Email</th>
+                                <th>Title</th>
+                                <th>Code</th>
                                 <th>Quantity</th>
-                                <th>Charge</th>
+                                <th>Branch</th>
+                                <th>Selling Price</th>
+                                <th>Discount</th>
                                 <th>Total Amount</th>
-                                <th>Payment Status</th>
                                 <th>Status</th>
                                 @canany(['Edit Order', 'Delete Order'])
                                     <th>Action</th>
@@ -55,39 +63,39 @@
                         <tbody>
                             @foreach ($orders as $order)
                                 <tr>
-                                    <td>{{ $order->id }}</td>
-                                    <td>{{ $order->order_number }}</td>
-                                    <td>{{ $order->name }} {{ $order->l_name }}</td>
-                                    <td>{{ $order->email }}</td>
-                                    <td>{{ $order->quantity }}</td>
-                                    <td>{{ $order->shipping->price }}</td>
-                                    <td>৳{{ number_format($order->amount, 2) }}</td>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $order->product?->title }}</td>
+                                    <td>{{ $order->product?->code }}</td>
+                                    <td>{{ $order->qty }}</td>
+                                    <td>{{ $order->Branch?->name }}</td>
+                                    <td>{{ $order->selling_price }}</td>
+                                    <td>{{ $order->order_discount }}</td>
+                                    <td>{{ $order->final_price }}</td>
                                     <td>
-                                       {{$order->payment_status}}
-                                    </td>
-                                    <td>
-                                        @if ($order->status == 'New')
-                                            <span class="badge badge-primary">{{ $order->status }}</span>
-                                        @elseif($order->status == 'Processing')
-                                            <span class="badge badge-warning">{{ $order->status }}</span>
-                                        @elseif($order->status == 'Delivered')
-                                            <span class="badge badge-success">{{ $order->status }}</span>
+                                        @if ($order->order_status == 'New')
+                                            <span class="badge badge-primary">{{ $order->order_status }}</span>
+                                        @elseif($order->order_status == 'Pending')
+                                            <span class="badge badge-info">{{ $order->order_status }}</span>
+                                        @elseif($order->order_status == 'Processing')
+                                            <span class="badge badge-warning">{{ $order->order_status }}</span>
+                                        @elseif($order->order_status == 'Delivered')
+                                            <span class="badge badge-success">{{ $order->order_status }}</span>
                                         @else
-                                            <span class="badge badge-danger">{{ $order->status }}</span>
+                                            <span class="badge badge-danger">{{ $order->order_status }}</span>
                                         @endif
                                     </td>
-                                    <td>
-                                        <a href="{{ route('order.show', $order->id) }}"
+                                    <td class="d-flex justify-content-center align-items-center">
+                                        {{-- <a href="{{ route('order.show',[$order->id]) }}"
                                             class="float-left mr-1 btn btn-warning btn-sm"
                                             style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
-                                            title="view" data-placement="bottom"><i class="fas fa-eye"></i></a>
+                                            title="view" data-placement="bottom"><i class="fas fa-eye"></i></a> --}}
                                         @can('Edit Order')
-                                            <a href="{{ route('order.edit', $order->id) }}"
+                                            <a href="{{ route('order.edit',$order->id) }}"
                                                 class="float-left mr-1 btn btn-primary btn-sm"
                                                 style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
                                                 title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
                                         @endcan
-                                        @can('Delet Order')
+                                        @can('Delete Order')
                                             <form method="POST" action="{{ route('order.destroy', [$order->id]) }}">
                                                 @csrf
                                                 @method('delete')

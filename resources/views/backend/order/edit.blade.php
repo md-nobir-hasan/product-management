@@ -6,6 +6,7 @@
 
 @section('main-content')
     <div class="card">
+        {{-- @dd($errors) --}}
         <h5 class="card-header">Order Edit</h5>
         <div class="card-body">
             <form action="{{ route('order.update', 1) }}" method="POST">
@@ -50,6 +51,7 @@
                                     </td>
                                     <td>
                                         {{ $order->product->title }}
+                                        <input type="hidden" name="order[{{ $loop->iteration }}][id]" value="{{$order->id}}">
                                     </td>
                                     <td>
                                         <input type="number" name="order[{{ $loop->iteration }}][qty]" min="1"
@@ -60,7 +62,7 @@
                                     </td>
                                     <td>
                                         <input type="number" name="order[{{ $loop->iteration }}][selling_price]"
-                                            min="0" value="{{ $order->selling_price }}"
+                                           value="{{ $order->selling_price }}"
                                             class="form-control selling_price">
                                         @error("order.$loop->iteration.selling_price")
                                             <span class="text-danger">{{ $message }}</span>
@@ -75,7 +77,7 @@
                                     </td>
                                     <td>
                                         <input type="number" name="order[{{ $loop->iteration }}][final_price]" i
-                                            min="0" value="{{ $order->final_price }}"
+                                            value="{{ $order->final_price }}"
                                             class="form-control final_price">
                                         @error("order.$loop->iteration.final_price")
                                             <span class="text-danger">{{ $message }}</span>
@@ -85,7 +87,7 @@
                                         <select name="order[{{ $loop->iteration }}][branch_id]" class="form-control">
                                             <option value="">--Select Branch--</option>
                                             @foreach ($branches as $branch)
-                                                <option value="{{ $branch->id }}" @selected($branch->id == old('branch_id'))>
+                                                <option value="{{ $branch->id }}" @selected($branch->id == $order->branch_id)>
                                                     {{ $branch->name }}
                                                 </option>
                                             @endforeach
@@ -96,15 +98,15 @@
                                     </td>
 
                                     <td>
-                                        <select name="order[{{ $loop->iteration }}][order_status_id]" class="form-control">
+                                        <select name="order[{{ $loop->iteration }}][order_status]" class="form-control">
                                             <option value="">--Select Order Status--</option>
                                             @foreach ($order_statuses as $order_status)
-                                                <option value="{{ $order_status->id }}" @selected($order_status->id == old('order_status_id'))>
+                                                <option value="{{ $order_status->title }}" @selected($order_status->title == $order->order_status)>
                                                     {{ $order_status->title }}
                                                 </option>
                                             @endforeach
                                         </select>
-                                        @error("order.$loop->iteration.order_status_id")
+                                        @error("order.$loop->iteration.order_status")
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </td>

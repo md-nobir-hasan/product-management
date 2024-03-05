@@ -129,7 +129,7 @@ class OrderController extends Controller
             ->select('id', 'title')
             ->get();
 
-            // dd($n,$id,$id_check);
+        // dd($n,$id,$id_check);
         // if (count($n['new_orders']) < 1) {
         //     return to_route('selling');
         // }
@@ -149,6 +149,7 @@ class OrderController extends Controller
         $data = $request->validated();
 
         foreach ($data['order'] as $key => $order) {
+            $order_fetch = DB::table('orders')->where('id', $order['id'])->first();
             $order_update = DB::table('orders')->where('id', $order['id'])->update([
                 'qty' => $order['qty'],
                 'selling_price' => $order['selling_price'],
@@ -157,10 +158,8 @@ class OrderController extends Controller
                 'branch_id' => $order['branch_id'],
                 'order_status' => $order['order_status'],
             ]);
-            $order_fetch = DB::table('orders')->where('id', $order['id'])->first();
-            $product_stock_manage = DB::table('products')->where('id', $order_fetch['product_id'])->update([
-                'qty' => 
-            ])
+            $product_stock_manage = Product::find($order_fetch->product_id);
+            $product_stock_manage->update(['stock' => $product_stock_manage->stock + $order_fetch->qty - $order['qty']]);
         }
 
         request()->session()->flash('success', 'Successfully updated order');
@@ -194,9 +193,15 @@ class OrderController extends Controller
 
     public function cancel($id)
     {
-        $order = DB::table('orders')->where('id', $id)->first();
+        $order = Order::find($id);
+        $setting = DB::table('other_settings')->first();;
         if ($order) {
-            $order->update(['is_cancelled' => 0]);
+            $update = $order->update([
+                'is_cancelled' => 1,
+                'previous_branch_id' => $order->branch_id,
+                'branch_id' => $setting->branch_id,
+            ]);
+            DB::table('products')->where('id', $order->product_id)->increment('stock', $order->qty);
             request()->session()->flash('success', 'Successfully Canceled');
             return back();
         }
@@ -206,10 +211,14 @@ class OrderController extends Controller
 
     public function uncancel($id)
     {
-        $order = DB::table('orders')->where('id', $id)->first();
+        $order = Order::find($id);
         if ($order) {
-            $order->update(['is_cancelled' => 1]);
-            request()->session()->flash('success', 'Successfully Canceled');
+            $order->update([
+                'is_cancelled' => 0,
+                'branch_id' => $order->previous_branch_id,
+            ]);
+            DB::table('products')->where('id', $order->product_id)->decrement('stock', $order->qty);
+            request()->session()->flash('success', 'Successfully Uncanceled');
             return back();
         }
         request()->session()->flash('error', 'Something Wrong');

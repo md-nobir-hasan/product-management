@@ -10,43 +10,20 @@
             <form method="post" action="{{ route('setting.os.update') }}">
                 @csrf
 
-                <div class="form-group">
-                    <label for="new_product" class="col-form-label">New Product's Time (How many days after adding the
-                        product)<span class="text-danger">*</span></label>
-                    <input type="number" class="form-control" name="new_product" required value="{{ $data?->new_product }}">
-                    @error('new_product')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
+                   <div class="form-group">
+                        <label for="color_id">Default Branch<span class="text-danger">*</span></label>
+                        <select name="branch_id" class="form-control">
+                            <option value="">--Select Branch--</option>
+                            @foreach ($branches as $branch)
+                                <option value="{{ $branch->id }}" @selected($branch->id == $data->branch_id)>{{ $branch->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('branch_id')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
 
-                <div class="form-group">
-                    <label for="popular_product" class="col-form-label">Propular Product's limit (How many products you want
-                        to show according to their popularity)<span class="text-danger">*</span></label>
-                    <input type="number" class="form-control" name="popular_product" required
-                        value="{{ $data?->popular_product }}">
-                    @error('popular_product')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
-
-                <div class="form-group">
-                    <label for="most_viewed_product" class="col-form-label">Most Viewed Product's limit (How many products
-                        you want to show according to their views)<span class="text-danger">*</span></label>
-                    <input type="number" class="form-control" name="most_viewed_product" required
-                        value="{{ $data?->most_viewed_product }}">
-                    @error('most_viewed_product')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
-
-                <div class="form-group">
-                    <label for="email" class="col-form-label">E-Mail</label>
-                    <input id="email" type="email" name="email" placeholder="Enter Email"
-                        value="{{ $data->email }}" class="form-control">
-                    @error('email')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
 
                 <div class="form-group">
                     <label for="fb" class="col-form-label">Facebook</label>

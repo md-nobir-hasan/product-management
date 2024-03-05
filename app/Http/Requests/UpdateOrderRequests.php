@@ -25,7 +25,7 @@ class UpdateOrderRequests extends FormRequest
             'order.*.id' => ['required', 'integer',"exists:orders,id"],
             'order.*.qty' => ['required', 'integer'],
             'order.*.selling_price' => ['required', 'numeric', 'max:99999999', 'min:0'],
-            'order.*.order_discount' => ['required', 'numeric', 'max:99999999', 'min:0'],
+            'order.*.order_discount' => ['required', 'numeric', 'max:99999999', 'min:-999999'],
             'order.*.final_price' => ['required', 'numeric', 'max:99999999', 'min:0'],
             'order.*.branch_id' => ['required', 'exists:branches,id'],
             'order.*.order_status' => ['required', 'string'],

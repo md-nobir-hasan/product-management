@@ -67,7 +67,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="discount" class="col-form-label">Discount(BDT)</label>
+                        <label for="discount" class="col-form-label">Discount (BDT)</label>
                         <input id="discount" type="number" name="discount" min="0" max="9999999"
                             placeholder="Exp:- Enter discount" value="{{ old('discount') ? old('discount') : 0 }}"
                             class="form-control">
@@ -301,7 +301,6 @@
             $('#final_price_div').hide();
 
             $('#price').on('keyup', function() {
-
                 let price = $('#price').val() ? $('#price').val() : '0';
                 let discount = $('#discount').val() ? $('#discount').val() : 0;
                 let final_price = Number(price) - Number(discount);

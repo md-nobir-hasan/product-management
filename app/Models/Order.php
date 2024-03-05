@@ -1,37 +1,46 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
 {
-    protected $fillable=['user_id','order_number','sub_total','quantity','delivery_charge',
-     'amount','installment_count','payable','name','l_name','country','post_code','address','address2','phone','email','payment_method',
-     'payment_status','shipping_id','coupon', 'order_status_id','divission_id', 'status', 'transaction_id',
-        'currency', 'city', 'inventory_cost'];
+    protected $fillable = [
+        'order_number', 'product_id', 'qty',
+        'inventory_cost', 'dollar_cost', 'other_cost', 'price', 'discount',
+        'selling_price', 'order_discount', 'final_price', 'branch_id',
+        'order_status', 'is_cancelled', 'payment_method', 'user_id',
+        'shipping_id', 'payment_status', 'transaction_id', 'comment', 'previous_branch_id',
+    ];
 
 
-    public static function getAllOrder($id){
+    public static function getAllOrder($id)
+    {
         return Order::with('cart_info')->find($id);
     }
 
-    public static function countActiveOrder(){
-        $data=Order::count();
-        if($data){
+    public static function countActiveOrder()
+    {
+        $data = Order::count();
+        if ($data) {
             return $data;
         }
         return 0;
     }
 
 
-    public function shipping(){
-        return $this->belongsTo(Shipping::class,'shipping_id');
+    public function shipping()
+    {
+        return $this->belongsTo(Shipping::class, 'shipping_id');
     }
-    public function product(){
+    public function product()
+    {
         return $this->belongsTo(Product::class);
     }
-    public function Branch(){
+    public function Branch()
+    {
         return $this->belongsTo(Branch::class);
     }
     public function user()
@@ -42,15 +51,16 @@ class Order extends Model
     {
         return $this->belongsTo(OrderStatus::class);
     }
-    public function pending(){
-        return count($this->where('status','Pending')->get());
+    public function pending()
+    {
+        return count($this->where('status', 'Pending')->get());
     }
-    public function delivered(){
-        return count($this->where('status','Delivered')->get());
+    public function delivered()
+    {
+        return count($this->where('status', 'Delivered')->get());
     }
-    public function cancelled(){
-        return count($this->where('status','Cancelled')->get());
+    public function cancelled()
+    {
+        return count($this->where('status', 'Cancelled')->get());
     }
-
-
 }

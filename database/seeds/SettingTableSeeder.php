@@ -26,9 +26,7 @@ class SettingTableSeeder extends Seeder
         DB::table('settings')->insert($data);
 
         $other_setting=array(
-            'new_product'=>20,
-            'popular_product'=>25,
-            'most_viewed_product'=>30,
+            'branch_id'=>1,
         );
         DB::table('other_settings')->insert($other_setting);
     }

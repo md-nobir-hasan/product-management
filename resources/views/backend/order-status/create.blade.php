@@ -6,6 +6,7 @@
 @section('main-content')
 
 <div class="card">
+ 
     <h5 class="card-header">Add Order Status</h5>
     <div class="card-body">
       <form method="post" action="{{route('order-status.store')}}">

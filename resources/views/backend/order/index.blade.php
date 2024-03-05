@@ -86,24 +86,26 @@
                                         @endif
                                     </td>
                                     <td class="d-flex justify-content-center align-items-center">
-                                        @if ($order->is_canceled)
-                                            <a href="{{ route('order.uncancel', [$order->id]) }}"
-                                                class="float-left mr-1 btn btn-warning btn-sm"
+
+                                        @if ($order->is_cancelled)
+                                            <a href="{{ route('order.uncancel', [$order->id]) }}" onclick="confirm('Are you sure. The product returned from the default branch to the previous branch')"
+                                                class="float-left btn btn-success btn-sm mr-1 p-0"
                                                 style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
-                                                title="view" data-placement="bottom">
+                                                title="Uncancel" data-placement="bottom">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                    stroke-width="1.5" stroke="currentColor" class="text-success">
+                                                    stroke-width="1.5" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                                 </svg>
                                             </a>
                                         @else
-                                            <a href="{{ route('order.cancel', [$order->id]) }}"
-                                                class="float-left mr-1 btn btn-warning btn-sm"
+                                          {{-- @dd($order->is_cancelled,0); --}}
+                                            <a href="{{ route('order.cancel', [$order->id]) }}" onclick="confirm('Are you sure. The product returned to the default branch')"
+                                                class="float-left mr-1 btn btn-danger btn-sm p-0"
                                                 style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
-                                                title="view" data-placement="bottom">
+                                                title="Cancel" data-placement="bottom">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                    stroke-width="1.5" stroke="currentColor" class="text-danger">
+                                                    stroke-width="1.5" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                                 </svg>

@@ -32,6 +32,7 @@ class CreateOrdersTable extends Migration
             $table->float('order_discount',10,2)->default(0);
             $table->float('final_price',10,2)->default(0);
             $table->foreignIdFor(Branch::class)->nullable()->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->unsignedBigInteger('previous_branch_id')->nullable();
             $table->string('order_status')->default('New');
             $table->boolean('is_cancelled')->default(0);
             $table->enum('payment_method',['cod','online'])->default('cod');

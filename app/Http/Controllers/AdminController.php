@@ -83,16 +83,15 @@ class AdminController extends Controller
         return redirect()->route('admin');
     }
     public function otherSettings(){
-        $data=OtherSetting::first();
-        return view('backend.setting.other')->with('data',$data);
+        $n['data']=OtherSetting::first();
+        $n['branches'] = DB::table('branches')->get();
+        return view('backend.setting.other',$n);
     }
 
     public function otherSettingsUpdate(Request $request){
         // return $request->all();
         $this->validate($request,[
-            'new_product'=>'required|numeric',
-            'popular_product'=>'required|numeric',
-            'most_viewed_product'=>'required|numeric',
+            'branch_id' => ['integer','required','exists:branches,id']
         ]);
         $data=$request->all();
         // return $data;

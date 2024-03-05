@@ -7,6 +7,13 @@
 @section('main-content')
     <div class="card">
         {{-- @dd($errors) --}}
+           {{-- @if($errors->any())
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li class="text-danger">{{$error}}</li>
+            @endforeach
+        </ul>
+    @endif --}}
         <h5 class="card-header">Order Edit</h5>
         <div class="card-body">
             <form action="{{ route('order.update', 1) }}" method="POST">
@@ -71,7 +78,7 @@
                                     <td>
                                         <input type="number" name="order[{{ $loop->iteration }}][order_discount]"
                                             value="{{ $order->order_discount }}" class="form-control order_discount">
-                                        @error("order.$loop->iteration.selling_price")
+                                        @error("order.$loop->iteration.order_discount")
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </td>

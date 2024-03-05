@@ -27,13 +27,14 @@ class CreateProductsTable extends Migration
             $table->float('inventory_cost',10,2);
             $table->float('dollar_cost', 10, 2)->default(0);
             $table->float('other_cost', 10, 2)->default(0);
-            $table->float('discount', 10, 2)->default(0);
             $table->float('price', 10, 2);
+            $table->float('discount', 10, 2)->default(0);
             $table->float('final_price', 10, 2);
             $table->foreignIdFor(Branch::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignIdFor(Size::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignIdFor(Color::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->integer('stock')->default(1);
+            $table->string('returned')->nullable();
             $table->text('photo');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->softDeletes();

@@ -194,14 +194,35 @@ class OrderController extends Controller
     public function cancel($id)
     {
         $order = Order::find($id);
-        $setting = DB::table('other_settings')->first();;
+        $other_setting = DB::table('other_settings')->first();
         if ($order) {
             $update = $order->update([
                 'is_cancelled' => 1,
-                'previous_branch_id' => $order->branch_id,
-                'branch_id' => $setting->branch_id,
+                // 'previous_branch_id' => $order->branch_id,
+                // 'branch_id' => $other_setting->branch_id,
             ]);
-            DB::table('products')->where('id', $order->product_id)->increment('stock', $order->qty);
+
+            $product = Product::id('id', $order->product_id);
+            // if ($product->branch_id == $other_setting->branch_id) {
+            //     $product->increment('stock', $order->qty);
+            // } else {
+                DB::table('products')->insert([
+                    'title' => $product->title,
+                    'code' => $product->code,
+                    'inventory_cost' => $product->inventory_cost,
+                    'dollar_cost' => $product->dollar_cost,
+                    'other_cost' => $product->other_cost,
+                    'price' => $product->price,
+                    'discount' => $product->discount,
+                    'final_price' => $product->final_price,
+                    'size_id' => $product->size_id,
+                    'color_id' => $product->color_id,
+                    'branch_id' => $other_setting->branch_id,
+                    'stock' => $order ,
+                    'photo' => $product->photo,
+                    'status' => $product->status,
+                ]);
+            // }
             request()->session()->flash('success', 'Successfully Canceled');
             return back();
         }
@@ -215,7 +236,7 @@ class OrderController extends Controller
         if ($order) {
             $order->update([
                 'is_cancelled' => 0,
-                'branch_id' => $order->previous_branch_id,
+                // 'branch_id' => $order->previous_branch_id,
             ]);
             DB::table('products')->where('id', $order->product_id)->decrement('stock', $order->qty);
             request()->session()->flash('success', 'Successfully Uncanceled');

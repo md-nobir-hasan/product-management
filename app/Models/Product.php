@@ -12,8 +12,9 @@ class Product extends Model
     use HasFactory;
     protected $fillable = [
         //main field
-        'title', 'code', 'inventory_cost', 'dollar_cost', 'other_cost', 'price',
-        'discount', 'final_price', 'size_id', 'color_id', 'branch_id', 'stock', 'photo', 'status',
+        'title', 'code', 'inventory_cost', 'dollar_cost', 'other_cost',
+         'price','discount', 'final_price','branch_id', 'size_id',
+          'color_id', 'stock', 'returned', 'photo', 'status',
     ];
 
     public function Branch()

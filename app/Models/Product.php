@@ -14,7 +14,7 @@ class Product extends Model
         //main field
         'title', 'code', 'inventory_cost', 'dollar_cost', 'other_cost',
          'price','discount', 'final_price','branch_id', 'size_id',
-          'color_id', 'stock', 'returned', 'photo', 'status',
+          'color_id', 'stock', 'photo', 'status', 'returned'
     ];
 
     public function Branch()

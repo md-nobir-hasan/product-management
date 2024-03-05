@@ -3,14 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Cart;
 use App\Models\Order;
 use PDF;
 use App\Http\Requests\StoreOrderRequests;
 use App\Http\Requests\UpdateOrderRequests;
 use App\Models\Product;
+use App\Notifications\StatusNotification;
+use App\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 class OrderController extends Controller
 {
@@ -193,7 +195,7 @@ class OrderController extends Controller
 
     public function cancel($id)
     {
-        $order = Order::find($id);
+        $order = Order::with('Branch')->find($id);
         $other_setting = DB::table('other_settings')->first();
         if ($order) {
             $update = $order->update([
@@ -202,26 +204,49 @@ class OrderController extends Controller
                 // 'branch_id' => $other_setting->branch_id,
             ]);
 
-            $product = Product::id('id', $order->product_id);
-            // if ($product->branch_id == $other_setting->branch_id) {
-            //     $product->increment('stock', $order->qty);
-            // } else {
-                DB::table('products')->insert([
-                    'title' => $product->title,
-                    'code' => $product->code,
-                    'inventory_cost' => $product->inventory_cost,
-                    'dollar_cost' => $product->dollar_cost,
-                    'other_cost' => $product->other_cost,
-                    'price' => $product->price,
-                    'discount' => $product->discount,
-                    'final_price' => $product->final_price,
-                    'size_id' => $product->size_id,
-                    'color_id' => $product->color_id,
-                    'branch_id' => $other_setting->branch_id,
-                    'stock' => $order ,
-                    'photo' => $product->photo,
-                    'status' => $product->status,
-                ]);
+            $product = Product::find($order->product_id);
+            $product_insert = new Product();
+                $product->title = $product->title;
+                $product->code = $product->code;
+                $product->inventory_cost = $product->inventory_cost;
+                $product->dollar_cost = $product->dollar_cost;
+                $product->other_cost = $product->other_cost;
+                $product->price = $product->price;
+                $product->discount = $product->discount;
+                $product->final_price = $product->final_price;
+                $product->size_id = $product->size_id;
+                $product->color_id = $product->color_id;
+                $product->branch_id = $other_setting->branch_id;
+                $product->stock = $order->qty;
+                $product->returned = $order->Branch->name;
+                $product->photo = $product->photo;
+                $product->status = $product->status;
+                $product->save();
+          
+            // DB::table('products')->insert([
+            //     'title' => $product->title,
+            //     'code' => $product->code,
+            //     'inventory_cost' => $product->inventory_cost,
+            //     'dollar_cost' => $product->dollar_cost,
+            //     'other_cost' => $product->other_cost,
+            //     'price' => $product->price,
+            //     'discount' => $product->discount,
+            //     'final_price' => $product->final_price,
+            //     'size_id' => $product->size_id,
+            //     'color_id' => $product->color_id,
+            //     'branch_id' => $other_setting->branch_id,
+            //     'stock' => $order->qty,
+            //     'returned' => $order->Branch->name,
+            //     'photo' => $product->photo,
+            //     'status' => $product->status,
+            // ]);
+            $users = User::where('role', 'admin')->first();
+            $details = [
+                'title' => 'A Product Was Backed',
+                'actionURL' => route('product.show', $order->product_id),
+                'fas' => 'fa-file-alt'
+            ];
+            Notification::send($users, new StatusNotification($details));
             // }
             request()->session()->flash('success', 'Successfully Canceled');
             return back();
@@ -232,13 +257,14 @@ class OrderController extends Controller
 
     public function uncancel($id)
     {
-        $order = Order::find($id);
+        $order = Order::with(['product', 'Branch'])->find($id);
         if ($order) {
             $order->update([
                 'is_cancelled' => 0,
                 // 'branch_id' => $order->previous_branch_id,
             ]);
-            DB::table('products')->where('id', $order->product_id)->decrement('stock', $order->qty);
+            $product  = Product::where('code', $order->product->code)->where('returned', $order->Branch->name)->delete();
+            // DB::table('products')->where('id', $order->product_id)->decrement('stock', $order->qty);
             request()->session()->flash('success', 'Successfully Uncanceled');
             return back();
         }

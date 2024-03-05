@@ -77,6 +77,13 @@
                                             <td>Code</td>
                                             <td> : {{ $product->code }}</td>
                                         </tr>
+                                        {{-- @if ($product->returned) --}}
+                                            <tr class="">
+                                                <td>Returned From</td>
+                                                <td> : {{ $product->returned }}</td>
+                                            </tr>
+                                        {{-- @endif --}}
+
                                         <tr class="">
                                             <td>Inventory Cost</td>
                                             <td> : {{ $product->inventory_cost }}</td>

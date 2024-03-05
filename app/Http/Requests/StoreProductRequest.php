@@ -23,7 +23,7 @@ class StoreProductRequest extends FormRequest
     {
         return     [
             'title' => 'string|required|max:255',
-            'code' => 'string|unique:products,code|max:255',
+            'code' => 'string|max:255',
             'inventory_cost' => 'required|numeric|max:9999999',
             'dollar_cost' => 'nullable|numeric|max:9999999',
             'other_cost' => 'nullable|numeric|max:9999999',

@@ -23,7 +23,7 @@ class CreateProductsTable extends Migration
             // main attributes => (22)
             $table->id();
             $table->string('title');
-            $table->string('code')->unique();
+            $table->string('code');
             $table->float('inventory_cost',10,2);
             $table->float('dollar_cost', 10, 2)->default(0);
             $table->float('other_cost', 10, 2)->default(0);

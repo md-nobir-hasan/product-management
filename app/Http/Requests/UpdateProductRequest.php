@@ -22,10 +22,9 @@ class UpdateProductRequest extends FormRequest
      */
     public function rules(): array
     {
-        $product = DB::table('products')->find($this->product);
         return [
             'title' => 'string|required|max:255',
-            'code' => 'string|unique:products,code,' . $product->id . '|max:255',
+            'code' => 'string|max:255',
             'inventory_cost' => 'required|numeric|max:9999999',
             'dollar_cost' => 'nullable|numeric|max:9999999',
             'other_cost' => 'nullable|numeric|max:9999999',

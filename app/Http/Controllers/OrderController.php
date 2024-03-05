@@ -58,6 +58,7 @@ class OrderController extends Controller
         $this->ccan('Create Order');
 
         $data = $request->validated();
+
         $order_number = 'ORD-' . rand(1, 999) . strtoupper(Str::random(10));
         $user_id = Auth()->user()->id;
         foreach ($data['product'] as $key => $product) {
@@ -116,9 +117,9 @@ class OrderController extends Controller
     {
         $this->ccan('Edit Order');
         $id_check = (int)$id;
-        if(is_int($id_check)>0){
+        if ($id_check > 0) {
             $n['new_orders'] = Order::with('product')->where('id', $id_check)->get();
-        }else{
+        } else {
             $n['new_orders'] = Order::with('product')->where('order_number', $id)->get();
         }
 
@@ -127,9 +128,11 @@ class OrderController extends Controller
             ->where('status', 'active')
             ->select('id', 'title')
             ->get();
-        if (count($n['new_orders']) < 1) {
-            return to_route('selling');
-        }
+
+            // dd($n,$id,$id_check);
+        // if (count($n['new_orders']) < 1) {
+        //     return to_route('selling');
+        // }
         return view('backend.order.edit', $n);
     }
 
@@ -144,8 +147,9 @@ class OrderController extends Controller
     {
         $this->ccan('Edit Order');
         $data = $request->validated();
+
         foreach ($data['order'] as $key => $order) {
-            $order = DB::table('orders')->where('id',$order['id'])->update([
+            $order_update = DB::table('orders')->where('id', $order['id'])->update([
                 'qty' => $order['qty'],
                 'selling_price' => $order['selling_price'],
                 'order_discount' => $order['order_discount'],
@@ -153,6 +157,10 @@ class OrderController extends Controller
                 'branch_id' => $order['branch_id'],
                 'order_status' => $order['order_status'],
             ]);
+            $order_fetch = DB::table('orders')->where('id', $order['id'])->first();
+            $product_stock_manage = DB::table('products')->where('id', $order_fetch['product_id'])->update([
+                'qty' => 
+            ])
         }
 
         request()->session()->flash('success', 'Successfully updated order');
@@ -182,6 +190,30 @@ class OrderController extends Controller
             request()->session()->flash('error', 'Order can not found');
             return redirect()->back();
         }
+    }
+
+    public function cancel($id)
+    {
+        $order = DB::table('orders')->where('id', $id)->first();
+        if ($order) {
+            $order->update(['is_cancelled' => 0]);
+            request()->session()->flash('success', 'Successfully Canceled');
+            return back();
+        }
+        request()->session()->flash('error', 'Something Wrong');
+        return back();
+    }
+
+    public function uncancel($id)
+    {
+        $order = DB::table('orders')->where('id', $id)->first();
+        if ($order) {
+            $order->update(['is_cancelled' => 1]);
+            request()->session()->flash('success', 'Successfully Canceled');
+            return back();
+        }
+        request()->session()->flash('error', 'Something Wrong');
+        return back();
     }
 
     public function orderTrack()

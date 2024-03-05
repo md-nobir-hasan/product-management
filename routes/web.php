@@ -233,7 +233,8 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
 
     // Order
     Route::resource('/order', OrderController::class);
-
+    Route::get('/order/cancel/{id}',[OrderController::class,'cancel'])->name('order.cancel');
+    Route::get('/order/uncancel/{id}',[OrderController::class,'uncancel'])->name('order.uncancel');
     //Selling the products
     Route::get('/selling', [OrderController::class, 'create'])->name('selling');
     // Route::get('/selling-confirm', [OrderController::class,'confirm'])->name('selling.confirm');

@@ -21,13 +21,14 @@
                 Processing: {{ count($count->where('order_status', 'Processing')) }}
             </h6>
             <h6>
-                <a href="{{route('selling')}}"><button type="button" class="btn btn-primary">Go to Selling</button> </a>
+                <a href="{{ route('selling') }}"><button type="button" class="btn btn-primary">Go to Selling</button> </a>
             </h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 @if (count($orders) > 0)
-                    <table class="table table-bordered table-striped text-center" id="order-dataTable" width="100%" cellspacing="0">
+                    <table class="table table-bordered table-striped text-center" id="order-dataTable" width="100%"
+                        cellspacing="0">
                         <thead>
                             <tr>
                                 <th>S.N.</th>
@@ -85,12 +86,33 @@
                                         @endif
                                     </td>
                                     <td class="d-flex justify-content-center align-items-center">
-                                        {{-- <a href="{{ route('order.show',[$order->id]) }}"
-                                            class="float-left mr-1 btn btn-warning btn-sm"
-                                            style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
-                                            title="view" data-placement="bottom"><i class="fas fa-eye"></i></a> --}}
+                                        @if ($order->is_canceled)
+                                            <a href="{{ route('order.uncancel', [$order->id]) }}"
+                                                class="float-left mr-1 btn btn-warning btn-sm"
+                                                style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
+                                                title="view" data-placement="bottom">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="1.5" stroke="currentColor" class="text-success">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                </svg>
+                                            </a>
+                                        @else
+                                            <a href="{{ route('order.cancel', [$order->id]) }}"
+                                                class="float-left mr-1 btn btn-warning btn-sm"
+                                                style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
+                                                title="view" data-placement="bottom">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="1.5" stroke="currentColor" class="text-danger">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                </svg>
+
+                                            </a>
+                                        @endif
+
                                         @can('Edit Order')
-                                            <a href="{{ route('order.edit',$order->id) }}"
+                                            <a href="{{ route('order.edit', $order->id) }}"
                                                 class="float-left mr-1 btn btn-primary btn-sm"
                                                 style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
                                                 title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
